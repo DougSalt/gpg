@@ -161,7 +161,6 @@ class ClearText (var cryptogram: File) {
     var gpg = GPGConfiguration.commandLine 
     gpg += " --batch --yes --decrypt"
     gpg += " --passphrase \"" + passphrase + "\""
-
     gpg += " " + cryptogram.toString()
     try lines = (gpg).!!.toString.split('\n').toList 
       catch {

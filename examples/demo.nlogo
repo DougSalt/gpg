@@ -21,7 +21,7 @@ to symmetric_encryption
 end
 
 to ppk
-  gpg:cmd "cmd --homedir netlogo2"
+  ;gpg:cmd "cmd --homedir netlogo2"
   let file gpg:attach "ppk.gpg"
   gpg:open file
   while [ not (gpg:at-end? file) ] [
@@ -42,10 +42,10 @@ to ppk_with_password
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
-690
-35
-723
-69
+676
+15
+709
+49
 -1
 -1
 25.0
