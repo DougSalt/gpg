@@ -1,21 +1,54 @@
 extensions [gpg]
 
-to setup
-  let file gpg:file-open "c:/users/ds42723/test.txt.gpg"
-  while [ not (gpg:file-at-end? file) ] [
-    show gpg:file-read-line file
+to symmetric_encryption_no_password
+  let file gpg:attach "symmetric.gpg"
+  gpg:open file
+  while [ not (gpg:at-end? file) ] [
+    output-show gpg:read-line file
   ]
-  gpg:file-close file
+  gpg:close file
+end
+
+to symmetric_encryption
+  gpg:cmd "cmd"
+  let file gpg:attach "symmetric.gpg"
+  gpg:passphrase file passphrase
+  gpg:open file
+  while [ not (gpg:at-end? file) ] [
+    output-show gpg:read-line file
+  ]
+  gpg:close file
+end
+
+to ppk
+  gpg:cmd "cmd --homedir netlogo2"
+  let file gpg:attach "ppk.gpg"
+  gpg:open file
+  while [ not (gpg:at-end? file) ] [
+    output-show gpg:read-line file
+  ]
+  gpg:close file
+end
+
+to ppk_with_password
+  gpg:cmd "cmd --homedir netlogo2"
+  let file gpg:attach "ppk.gpg"
+  gpg:passphrase file passphrase
+  gpg:open file
+  while [ not (gpg:at-end? file) ] [
+    output-show gpg:read-line file
+  ]
+  gpg:close file
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
-210
-10
-647
-448
+690
+35
+723
+69
 -1
 -1
-13.0
+25.0
 1
 10
 1
@@ -25,10 +58,10 @@ GRAPHICS-WINDOW
 1
 1
 1
--16
-16
--16
-16
+0
+0
+0
+0
 0
 0
 1
@@ -38,10 +71,79 @@ ticks
 BUTTON
 23
 41
-86
+256
 74
+Symmetic decryption
+symmetric_encryption_no_password
 NIL
-setup
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
+
+INPUTBOX
+611
+65
+713
+125
+passphrase
+0
+1
+0
+String
+
+OUTPUT
+15
+138
+715
+380
+10
+
+BUTTON
+25
+83
+258
+116
+Symmetric decryption with password
+symmetric_encryption
+NIL
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
+
+BUTTON
+293
+40
+356
+73
+NIL
+ppk
+NIL
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
+
+BUTTON
+499
+92
+599
+125
+NIL
+clear-output
 NIL
 1
 T
