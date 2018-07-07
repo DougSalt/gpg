@@ -10,6 +10,7 @@ import scala.collection.mutable.Map
 import scala.sys.process._
 import org.nlogo.core.PrimitiveReporter
 import java.io.File
+import System.err.println
 
 class Encrypt extends DefaultClassManager {
   def load(manager: PrimitiveManager) {
@@ -160,9 +161,13 @@ class ClearText (var cryptogram: File) {
   def open(): Unit = {
     var gpg = GPGConfiguration.commandLine 
     gpg += " --batch --yes --decrypt"
-    gpg += " --passphrase \"" + passphrase + "\""
+    // One of the differences between Linux and Windows. The character " is not absorbed in Linux
+    if (passphrase == "")
+      gpg += " --passphrase \"" + passphrase + "\""
+    else
+      gpg += " --passphrase " + passphrase 
     gpg += " " + cryptogram.toString()
-    try lines = (gpg).!!.toString.split('\n').toList 
+    try lines = (gpg).!!.toString.split('\n').toList
       catch {
         case e: Exception => {
           if (passphrase == "") {

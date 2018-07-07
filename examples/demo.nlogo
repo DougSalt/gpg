@@ -10,7 +10,7 @@ to symmetric_encryption_no_password
 end
 
 to symmetric_encryption
-  gpg:cmd "cmd"
+  gpg:cmd "/home/doug/doug.sh"
   let file gpg:attach "symmetric.gpg"
   gpg:passphrase file passphrase
   gpg:open file
@@ -20,8 +20,8 @@ to symmetric_encryption
   gpg:close file
 end
 
-to ppk
-  ;gpg:cmd "cmd --homedir netlogo2"
+to ppk_no_password
+  gpg:cmd "gpg --homedir netlogo2"
   let file gpg:attach "ppk.gpg"
   gpg:open file
   while [ not (gpg:at-end? file) ] [
@@ -30,8 +30,8 @@ to ppk
   gpg:close file
 end
 
-to ppk_with_password
-  gpg:cmd "cmd --homedir netlogo2"
+to ppk
+  gpg:cmd "gpg --homedir /home/doug/git/gpg/examples/netlogo2"
   let file gpg:attach "ppk.gpg"
   gpg:passphrase file passphrase
   gpg:open file
@@ -69,10 +69,10 @@ ticks
 30.0
 
 BUTTON
-23
-41
-256
-74
+14
+55
+247
+88
 Symmetic decryption
 symmetric_encryption_no_password
 NIL
@@ -91,7 +91,7 @@ INPUTBOX
 713
 125
 passphrase
-0
+TopSecret
 1
 0
 String
@@ -104,10 +104,10 @@ OUTPUT
 10
 
 BUTTON
-25
-83
-258
-116
+16
+97
+249
+130
 Symmetric decryption with password
 symmetric_encryption
 NIL
@@ -121,11 +121,11 @@ NIL
 1
 
 BUTTON
-293
-40
-356
-73
-NIL
+253
+55
+491
+88
+Public/private key encryption
 ppk
 NIL
 1
@@ -144,6 +144,23 @@ BUTTON
 125
 NIL
 clear-output
+NIL
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
+
+BUTTON
+256
+95
+444
+128
+No password and ppk
+ppk_no_password
 NIL
 1
 T
@@ -496,7 +513,7 @@ false
 Polygon -7500403 true true 270 75 225 30 30 225 75 270
 Polygon -7500403 true true 30 75 75 30 270 225 225 270
 @#$#@#$#@
-NetLogo 6.0.2
+NetLogo 6.0.4
 @#$#@#$#@
 @#$#@#$#@
 @#$#@#$#@
