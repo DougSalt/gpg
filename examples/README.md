@@ -1,20 +1,26 @@
 
 Used the following twice:
 
-`gpg --homedir netlogo1 --gen-key`
+```
+gpg --homedir netlogo1 --gen-key
+```
 
 To generate the first two keys, and
 
-`gpg --homedir netlogo2 --gen-key`
+```
+gpg --homedir netlogo2 --gen-key
+```
 
 to generate the 3rd with the follwoing details.
 
+```
 | User           | Email                  | Password        |  Homedir | 
 |                |                        | (none if blank) |          |
 |----------------|------------------------|----------------------------|
 | NetLogo User 1 | <netlogo1@netlogo.com> | Secret          | netlogo1 |
 | NetLogo User 2 | <netlogo2@netlogo.com> |                 | netlogo1 |
 | NetLogo User 2 | <netlogo3@netlogo.com> | TopSecret       | netlogo2 |
+```
 
 This will generate the following files in netlogo1 and netlogo2:
 
