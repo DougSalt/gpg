@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>paper</title>
+  <style type="text/css">
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header>
+<h1 class="title">A NetLogo plug-in to secure  data using GNU\'s Pretty Good Privacy software suite.</h1>
+<p class="subtitle">Text mining for terminology</p>
+<p class="author">Doug Salt\textsuperscript{OrcID: 0000-0001-5186-9388} \and Gary Polhill\textsuperscript{OrcID: 0000-0002-8596-0590}</p>
+</header>
+<h1 id="introduction">Introduction</h1>
+<p>Cheap, publically-accessible, distributed storage, colloquially known as the “cloud” is becoming increasingly prevalent [@] and is increasingly used for the storing of experimental data [@]. Storing experimental data in this way has several advantages, such as any access to the internet allows instant access to this data [@]. This means the data is effectively accessible anywhere. Data might be stored in a single location, or it might be distributed. The convenience is that from the point of view of the consumer of the data, it all appears to originate at a single web-based location [@]. Also such data is cloned and distributed in real space for the purposes of fault-tolerance [@] and thus can exist in many locations simultaneously [@]. Thus the the chances of it being lost are remote [@].</p>
+<p>It is reasonably easy to use such cloud hosted data in Netlogo models. This following list of providers is by no means meant to be comprehensive, and some institutions provide their own, cloud-based solutions, but it is our suspicion that some, non-technically aware NetLogo users are making use of the cloud without being aware of the ramifications of doing so, and doing so by using the cheap and often free provision of these cloud-storage hosters. This arises because each of the major cloud storage providers such as Dropbox [@], Microsoft’s OneDrive [@] and Google Drive [@] provide tools that allow the invisible, local mounting of such resources. These exist for the the most prevalent platforms such as all Microsoft Windows versions greater than 7 [@][@][@]; all versions of Android [@][@][@], and Apple’s two operating systems: OSX and IOS[@][@][@]. This means that the “cloud” storage appears as local storage on the local machine, and NetLogo models do not need to be changed to access such data (other than changing a file name).</p>
+<p>The advantages listed above are also the method’s disadvantages. The publically accessible nature of such data could violate regional privacy laws. For instance storing personally identifiable data of a sensitive nature without sufficient safe-guards now violates the European GDPR [@]. The multiplicitiy of the storage means the creator of the data has largely lost control over the destruction of the data. Indeed if such data is of a personally identifiable nature, then, given GDPR requiements it is a legal requirement of the researcher to store the data in particular geographical areas (ibid.). The are stories of data n</p>
+<h1 id="the-netlogo-extension">The Netlogo Extension</h1>
+<h1 id="illustration">Illustration</h1>
+<h1 id="discussion-and-conclusions">Discussion and conclusions</h1>
+<p>In conjunction with Infrastructure as a Service (IaaS), then it is becoming increasingly common to see Netlogo models r</p>
+<p>We have developed a plugin that uses the Gnu PGP software to allow various types of encryption on the data only. We could develop a plugin that obscufucates the code, but we believe that this not only violates the code of openess that surround the NetLogo community, but also possibly violates the GNU Public License v2 under which NetLogo is distributed. Taking somebody’s open code and concealing it legally violoates the license, as this is precisely the reason the license was created in the first place [@]. It also violates the principle of open science as people should be able to inspect models to see the reasoning that underlies them. This is increasingly important where such models are used for policy decisiions [@]</p>
+<p>This code has been tested on Linux, Windows 7, Windows 10, and OSX so far the code could be ported in entirety into NetLogo. There are java libraries available that mirror the functionality of PGP [@]. However this has the limitation of precluding the rapid release cycle of encryption software once vulnerabilities have been discovered.</p>
+<h1 id="ackknowledgements">Ackknowledgements</h1>
+<h1 id="bibliography">Bibliography</h1>
+</body>
+</html>
