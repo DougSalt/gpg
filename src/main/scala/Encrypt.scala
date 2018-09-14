@@ -1,5 +1,6 @@
 import org.nlogo.api._
 import org.nlogo.api.ScalaConversions._
+import scala.collection.JavaConversions._
 import org.nlogo.api.Context
 import org.nlogo.core.Syntax
 import org.nlogo.core.Syntax.{ NumberType, ListType, BooleanType, StringType }
@@ -20,6 +21,7 @@ class Encrypt extends DefaultClassManager {
     manager.addPrimitive("close", new Close)
     manager.addPrimitive("at-end?", new AtEnd)
     manager.addPrimitive("read-line", new ReadLine)
+    manager.addPrimitive("home", new Home)
     manager.addPrimitive("cmd", new Cmd)
   }
 }
@@ -39,9 +41,25 @@ object ClearTextStorage {
 
 object GPGConfiguration {
   var commandLine = "gpg"
+  var homedir =  new File("")
+  check()
   def set(cmd: String) = {
     commandLine = cmd
     check()
+  }
+  def setHomeDir(home: String) {
+    for ((k,v) <- System.getProperties)
+        Console.println(k + " = "  + v)
+    if (path.exists)
+        homedir = path
+    else {
+      path = new File(System.getProperty("netlogo.models.dir") + "/" + home)
+      if (path.exists) 
+        homedir = path
+      else
+        throw new ExtensionException(home + " does not seem to exist, becomes " + path)
+    }
+    Console.println("home = " + homedir)
   }
   def check() ={
     var ver: String = ""
@@ -50,6 +68,17 @@ object GPGConfiguration {
       case e: Exception =>
         throw new ExtensionException("gpg has not been installed in your path")
     }
+  }
+}
+class Home extends Command {
+  override def getSyntax = Syntax.commandSyntax(right = List(StringType))
+  def perform(args: Array[Argument], context: Context) = {
+    val cmdLine = try args(0).getString
+    catch {
+      case e: LogoException =>
+        throw new ExtensionException(e.getMessage)
+    }
+    GPGConfiguration.setHomeDir(cmdLine)
   }
 }
 
@@ -166,6 +195,8 @@ class ClearText (var cryptogram: File) {
       gpg += " --passphrase \"" + passphrase + "\""
     else
       gpg += " --passphrase " + passphrase 
+    if (GPGConfiguration.homedir != "")
+      gpg += " --homedir " + GPGConfiguration.homedir
     gpg += " " + cryptogram.toString()
     try lines = (gpg).!!.toString.split('\n').toList
       catch {

@@ -9,3 +9,25 @@ lazy val gpg = (project in file("."))
           }
   )
 
+lazy val release = taskKey[Unit]("Execute release script")
+release:= {
+    val os = {"uname" !!}.stripLineEnd
+    println("OS = " + os)
+    if ( os == "Linux" ) {
+      "./release.sh" !
+    } else {
+      "./release.bat" !
+    }
+}
+
+lazy val netlogo = taskKey[Unit]("Execute nlogo")
+netlogo := {
+   val os = {"uname" !!}.stripLineEnd
+    println("OS = " + os)
+    if ( os == "Linux" ) {
+      "./run.sh" !
+    } else {
+      "./run.bat" !
+    }
+}
+

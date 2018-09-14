@@ -16,24 +16,24 @@ this data [@]. This means the data is effectively accessible anywhere.  Data
 might be stored in a single location, or it might be distributed. The
 convenience is that from the point of view of the consumer of the data, it all
 appears to originate at a single web-based location [@]. Also  such data is
-cloned and distributed in real space for the purposes of fault-tolerance [@]
+cloned and distributed in physical space for the purposes of fault-tolerance [@]
 and thus can exist in many locations simultaneously [@]. Thus the chances
 of it being lost are remote [@]. 
 
-It is reasonably easy to use such cloud hosted data in NetLogo models. This
-following list of providers is by no means meant to be comprehensive, and some
-institutions provide their own, cloud-based solutions, but it is our suspicion
-that some, non-technically aware NetLogo users are making use of the cloud
-without being aware of the ramifications of doing so, and doing so by using the
-cheap and often free provision of these cloud-storage hosts.  This arises
-because each of the major cloud storage providers such as Dropbox [@],
-Microsoft's OneDrive [@] and Google Drive [@] provide tools that allow  the
-invisible, local mounting of such resources. These exist for the most
-prevalent platforms such as all Microsoft Windows versions greater than 7 [@];
-all versions of Android [@], and Apple's two operating systems: OSX  and
-IOS[@]. This means that the "cloud" storage appears as local storage on the
-local machine, and NetLogo models do not need to be changed to access such data
-(other than changing a file name).
+It is reasonably easy to use such cloud hosted data in NetLogo models. Some
+institutions provide their own, cloud-based solutions, but most researchers
+will use at least one of the following, major cloud storage providers such as
+Dropbox [@], Microsoft's OneDrive [@] and Google Drive [@]. This list is by no
+means meant to be comprehensive. It is our suspicion that some, less
+technically aware NetLogo users are making use of the cloud without being aware
+of the ramifications of doing so, and doing so because these resources are
+cheap and often free.  This problem may well arise because each of these
+hosting companies provide tools that allow  the invisible, local mounting of
+such resources. These exist for the most prevalent platforms such as all
+Microsoft Windows versions greater than 7 [@]; all versions of Android [@], and
+Apple's two operating systems: OSX  and IOS[@]. This means that the "cloud"
+storage appears as local storage on the local machine, and NetLogo models do
+not need to be changed to access such data (other than changing a file name).
 
 The advantages listed above are also the method's disadvantages. The publicly
 accessible nature of such data could violate regional privacy laws.  For
@@ -44,9 +44,17 @@ destruction of the data. Indeed if such data is of a personally identifiable
 nature, then, given GDPR requirements it is a legal requirement of the
 researcher to store the data in particular geographical areas (ibid.).  The are
 stories of data 
-n
 
 # The NetLogo Extension
+
+The extension is very small and requires the installation of just one jar file. It also has the pre-requisite that GnuPGP 
+
+gpg:command
+gpg:attach
+gpg:open
+gpg:at-end?
+gpg:close
+
 # Illustration
 # Discussion and conclusions
 

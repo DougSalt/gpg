@@ -1,7 +1,7 @@
 extensions [gpg]
 
 to symmetric_encryption_no_password
-  let file gpg:attach "symmetric.gpg"
+  let file gpg:attach cryptogram
   gpg:open file
   while [ not (gpg:at-end? file) ] [
     output-show gpg:read-line file
@@ -10,8 +10,7 @@ to symmetric_encryption_no_password
 end
 
 to symmetric_encryption
-  gpg:cmd "/home/doug/doug.sh"
-  let file gpg:attach "symmetric.gpg"
+  let file gpg:attach cryptogram
   gpg:passphrase file passphrase
   gpg:open file
   while [ not (gpg:at-end? file) ] [
@@ -21,8 +20,8 @@ to symmetric_encryption
 end
 
 to ppk_no_password
-  gpg:cmd "gpg --homedir netlogo2"
-  let file gpg:attach "ppk.gpg"
+  gpg:home "netlogo2"
+  let file gpg:attach cryptogram
   gpg:open file
   while [ not (gpg:at-end? file) ] [
     output-show gpg:read-line file
@@ -31,8 +30,8 @@ to ppk_no_password
 end
 
 to ppk
-  gpg:cmd "gpg --homedir /home/doug/git/gpg/examples/netlogo2"
-  let file gpg:attach "ppk.gpg"
+  gpg:home "netlogo2"
+  let file gpg:attach cryptogram
   gpg:passphrase file passphrase
   gpg:open file
   while [ not (gpg:at-end? file) ] [
@@ -69,10 +68,10 @@ ticks
 30.0
 
 BUTTON
-14
-55
-247
-88
+18
+87
+251
+120
 Symmetic decryption
 symmetric_encryption_no_password
 NIL
@@ -86,10 +85,10 @@ NIL
 1
 
 INPUTBOX
-611
-65
-713
-125
+163
+10
+273
+70
 passphrase
 TopSecret
 1
@@ -97,17 +96,17 @@ TopSecret
 String
 
 OUTPUT
-15
-138
-715
-380
+22
+291
+718
+366
 10
 
 BUTTON
-16
-97
-249
-130
+20
+129
+253
+162
 Symmetric decryption with password
 symmetric_encryption
 NIL
@@ -121,10 +120,10 @@ NIL
 1
 
 BUTTON
-253
-55
-491
-88
+257
+87
+495
+120
 Public/private key encryption
 ppk
 NIL
@@ -138,10 +137,10 @@ NIL
 1
 
 BUTTON
-499
-92
-599
-125
+280
+10
+380
+43
 NIL
 clear-output
 NIL
@@ -155,10 +154,10 @@ NIL
 1
 
 BUTTON
-256
-95
-444
-128
+260
+127
+448
+160
 No password and ppk
 ppk_no_password
 NIL
@@ -169,6 +168,26 @@ NIL
 NIL
 NIL
 NIL
+1
+
+CHOOSER
+14
+10
+152
+55
+cryptogram
+cryptogram
+"symmetric.gpg" "ppk.gpg"
+1
+
+TEXTBOX
+27
+181
+678
+278
+Symmetric decryption with no password - this should always fail.\nSymmetric descryption with password requires the password \"aPassword\" and should work.
+11
+0.0
 1
 
 @#$#@#$#@
