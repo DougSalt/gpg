@@ -1,1 +1,33 @@
-/bin/
+# Protégé bollox
+
+catalog-v???.xml
+
+# Open office crap
+.~lock*
+
+# Vim crud
+*~
+*.swp
+*.swo
+
+# Emacs execrement
+
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+.\#*
+
+# Latex stuff
+
+tex2pdf.*
+*.log
+*.aux
+
+# Bibtex stuff
+
+*.bib.bak
+bin/
+target/
+project/target/
