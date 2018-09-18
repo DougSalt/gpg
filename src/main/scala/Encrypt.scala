@@ -1,6 +1,7 @@
 import org.nlogo.api._
 import org.nlogo.api.ScalaConversions._
-import scala.collection.JavaConversions._
+//import scala.collection.JavaConversions._
+import scala.collection.JavaConverters._
 import org.nlogo.api.Context
 import org.nlogo.core.Syntax
 import org.nlogo.core.Syntax.{ NumberType, ListType, BooleanType, StringType }
@@ -26,50 +27,7 @@ class Encrypt extends DefaultClassManager {
   }
 }
 
-object ClearTextStorage {
-  var storage = Map[String, ClearText]()
-  def store(ct: ClearText) = {
-    storage(ct.name) = ct
-  }
-  def retrieve(name: String): ClearText = {
-    storage(name)
-  }
-  def remove(name: String) = {
-    storage -= name
-  }
-}
 
-object GPGConfiguration {
-  var commandLine = "gpg"
-  var homedir =  new File("")
-  check()
-  def set(cmd: String) = {
-    commandLine = cmd
-    check()
-  }
-  def setHomeDir(home: String) {
-    for ((k,v) <- System.getProperties)
-        Console.println(k + " = "  + v)
-    if (path.exists)
-        homedir = path
-    else {
-      path = new File(System.getProperty("netlogo.models.dir") + "/" + home)
-      if (path.exists) 
-        homedir = path
-      else
-        throw new ExtensionException(home + " does not seem to exist, becomes " + path)
-    }
-    Console.println("home = " + homedir)
-  }
-  def check() ={
-    var ver: String = ""
-    try ver = (commandLine + " --version").!!.toString
-    catch {
-      case e: Exception =>
-        throw new ExtensionException("gpg has not been installed in your path")
-    }
-  }
-}
 class Home extends Command {
   override def getSyntax = Syntax.commandSyntax(right = List(StringType))
   def perform(args: Array[Argument], context: Context) = {
@@ -78,7 +36,7 @@ class Home extends Command {
       case e: LogoException =>
         throw new ExtensionException(e.getMessage)
     }
-    GPGConfiguration.setHomeDir(cmdLine)
+    GPGConfiguration.setHomeDir(cmdLine, context)
   }
 }
 
@@ -125,7 +83,7 @@ class PassPhrase extends Command {
       case e: LogoException =>
         throw new ExtensionException(e.getMessage)
     }
-    ClearTextStorage.retrieve(cryptogram).passphrase = passwd
+    ClearTextStorage.retrieve(cryptogram).setPassphrase(passwd)
   }
 }
 
@@ -137,7 +95,7 @@ class Open extends Command {
       case e: LogoException =>
         throw new ExtensionException(e.getMessage)
     }
-    ClearTextStorage.retrieve(cryptogram).open()
+    ClearTextStorage.retrieve(cryptogram).open
   }
 }
 
@@ -149,7 +107,7 @@ class ReadLine extends Reporter {
       case e: LogoException =>
         throw new ExtensionException(e.getMessage)
     }
-    ClearTextStorage.retrieve(clearTextName).next()
+    ClearTextStorage.retrieve(clearTextName).next
   }
   
 }
@@ -162,6 +120,7 @@ class Close extends Command {
       case e: LogoException =>
         throw new ExtensionException(e.getMessage)
     }
+
     ClearTextStorage.remove(clearTextName)
   }
 }
@@ -174,7 +133,7 @@ class AtEnd extends Reporter {
       case e: LogoException =>
         throw new ExtensionException(e.getMessage)
     }
-    ClearTextStorage.retrieve(clearTextName).eof().toLogoObject
+    ClearTextStorage.retrieve(clearTextName).eof.toLogoObject
   }
 }
 
@@ -182,8 +141,8 @@ class ClearText (var cryptogram: File) {
                      
   var name: String = new Random(31).toString()
   var pos: Int = 0
-  var lines: List[String] = _
-  var passphrase: String = ""
+  var lines: List[String] = List.empty
+  var passphrase: Option[String] = None 
   
   GPGConfiguration.check()
 
@@ -191,13 +150,14 @@ class ClearText (var cryptogram: File) {
     var gpg = GPGConfiguration.commandLine 
     gpg += " --batch --yes --decrypt"
     // One of the differences between Linux and Windows. The character " is not absorbed in Linux
-    if (passphrase == "")
-      gpg += " --passphrase \"" + passphrase + "\""
-    else
-      gpg += " --passphrase " + passphrase 
-    if (GPGConfiguration.homedir != "")
-      gpg += " --homedir " + GPGConfiguration.homedir
+    if (passphrase != None ) {
+      gpg += " --passphrase " + passphrase.get
+    }
+    if (GPGConfiguration.homedir != None) {
+      gpg += " --homedir " + GPGConfiguration.homedir.get
+    }
     gpg += " " + cryptogram.toString()
+    Console.println(gpg)
     try lines = (gpg).!!.toString.split('\n').toList
       catch {
         case e: Exception => {
@@ -209,7 +169,12 @@ class ClearText (var cryptogram: File) {
      }
   }
   
-  def next():String  = {
+  def setPassphrase ( pp : String ) = {
+    passphrase = Some(pp)
+  }
+
+
+  def next: String  = {
     if (pos > lines.size)
         throw new ExtensionException("read beyond the end of the file at position " + pos)
     var lineNo = pos
@@ -217,10 +182,63 @@ class ClearText (var cryptogram: File) {
     lines(lineNo)
   }
   
-  def eof(): Boolean = {
+  def eof: Boolean = {
     if (pos >= lines.size  )
       true
     else
       false
+  }
+
+  def close: Unit = {
+    name = ""
+    pos = 0
+    lines  = List.empty
+    passphrase  = None
+  }
+}
+
+object ClearTextStorage {
+  var storage = Map[String, ClearText]()
+  def store(ct: ClearText) = {
+    storage(ct.name) = ct
+  }
+  def retrieve(name: String): ClearText = {
+    storage(name)
+  }
+  def remove(name: String) = {
+    storage(name).close
+    storage -= name
+  }
+}
+
+object GPGConfiguration {
+  var commandLine = "gpg"
+  var homedir: Option[File] = None
+  check()
+  def set(cmd: String) = {
+    commandLine = cmd
+    check()
+  }
+  def setHomeDir(home: String, context: Context) {
+    // for ((k,v) <- System.getProperties.asScala)
+    //    Console.println(k + " = "  + v)
+    var path = new File(home)
+    if (path.exists)
+        homedir = Some(path)
+    else {
+      path = new File(context.workspace.getModelDir + "/" + home)
+      if (path.exists) 
+        homedir = Some(path)
+      else
+        throw new ExtensionException(home + " does not seem to exist, becomes " + path)
+    }
+  }
+  def check() ={
+    var ver: String = ""
+    try ver = (commandLine + " --version").!!.toString
+    catch {
+      case e: Exception =>
+        throw new ExtensionException("gpg has not been installed in your path")
+    }
   }
 }
