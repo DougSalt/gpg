@@ -30,4 +30,4 @@ tex2pdf.*
 *.bib.bak
 bin/
 target/
-project/target/
+project/
