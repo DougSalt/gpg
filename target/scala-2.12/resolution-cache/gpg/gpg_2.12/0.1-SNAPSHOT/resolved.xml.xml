@@ -4,7 +4,7 @@
 		module="gpg_2.12"
 		revision="0.1-SNAPSHOT"
 		status="integration"
-		publication="20180914160306"
+		publication="20180917101117"
 	>
 		<description>
 		gpg

@@ -41,3 +41,38 @@ release
 netlogo
 compile
 exit
+compile
+compile -depreciation
+compile -deprecation
+compile deprecation
+quit
+exit
+set scalacOptions in ThisBuild ++=Seq("-unchecked", "-deprecation")
+compile
+package
+release
+q
+exit
+release
+netlogo
+compile
+package
+release
+netlogo
+compile
+package
+release
+netlogo
+compile
+package
+release
+netlogo
+compile
+package
+release
+netlogo
+compile
+package
+release
+netlogo
+exit
