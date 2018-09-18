@@ -1,6 +1,6 @@
-extensions [gpg]
+extensions [gpg csv]
 
-to symmetric_encryption_no_password
+to symmetric_decryption_no_passphrase
   let file gpg:attach cryptogram
   gpg:open file
   while [ not (gpg:at-end? file) ] [
@@ -9,7 +9,7 @@ to symmetric_encryption_no_password
   gpg:close file
 end
 
-to symmetric_encryption
+to symmetric_decryption_with_passphrase
   let file gpg:attach cryptogram
   gpg:passphrase file passphrase
   gpg:open file
@@ -19,7 +19,7 @@ to symmetric_encryption
   gpg:close file
 end
 
-to ppk_no_password
+to ppk_no_passphrase_fails
   gpg:home "netlogo2"
   let file gpg:attach cryptogram
   gpg:open file
@@ -29,7 +29,17 @@ to ppk_no_password
   gpg:close file
 end
 
-to ppk
+to ppk_no_passphrase_works
+  gpg:home "netlogo1"
+  let file gpg:attach cryptogram
+  gpg:open file
+  while [ not (gpg:at-end? file) ] [
+    output-show gpg:read-line file
+  ]
+  gpg:close file
+end
+
+to ppk_with_passphrase_works
   gpg:home "netlogo2"
   let file gpg:attach cryptogram
   gpg:passphrase file passphrase
@@ -68,12 +78,12 @@ ticks
 30.0
 
 BUTTON
-18
-87
-251
-120
-Symmetic decryption
-symmetric_encryption_no_password
+19
+90
+271
+124
+Symmetric decryption - no passphrase
+symmetric_decryption_no_passphrase\n; This should always fail
 NIL
 1
 T
@@ -105,10 +115,10 @@ OUTPUT
 BUTTON
 20
 129
-253
+269
 162
 Symmetric decryption with password
-symmetric_encryption
+symmetric_decryption_with_passphrase\n; this should work with\n; + the file: symmetric.gpg\n; + the password: aPassword
 NIL
 1
 T
@@ -120,12 +130,12 @@ NIL
 1
 
 BUTTON
-257
+330
 87
-495
+577
 120
-Public/private key encryption
-ppk
+PPK with no passphrase - fails
+ppk_no_passphrase_fails\n; Always fails
 NIL
 1
 T
@@ -154,12 +164,12 @@ NIL
 1
 
 BUTTON
-260
+331
 127
-448
+567
 160
-No password and ppk
-ppk_no_password
+PPK no passphrase - works
+ppk_no_passphrase_works\n; This should work on:\n; + file:  ppk.gpg\n; + homedir: netlogo1
 NIL
 1
 T
@@ -181,13 +191,30 @@ cryptogram
 1
 
 TEXTBOX
-27
-181
-678
-278
-Symmetric decryption with no password - this should always fail.\nSymmetric descryption with password requires the password \"aPassword\" and should work.
+26
+218
+677
+315
+Symmetric decryption with no password - this should always fail.\nSymmetric decryption will work with the password \"aPassword\"  and the cryptogram \"symmetric.gpg\".
 11
 0.0
+1
+
+BUTTON
+332
+168
+568
+201
+PPK with passphrase - works
+ppk_with_passphrase_works
+NIL
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
 1
 
 @#$#@#$#@
@@ -201,7 +228,76 @@ Symmetric decryption with no password - this should always fail.\nSymmetric desc
 
 ## HOW TO USE IT
 
-(how to use the model, including a description of each of the items in the Interface tab)
+
+Used the following twice:
+
+```
+gpg --homedir netlogo1 --gen-key
+```
+
+To generate the first two keys, and
+
+```
+gpg --homedir netlogo2 --gen-key
+```
+
+to generate the 3rd with the follwoing details.
+
+```
+| User           | Email                  | Password        |  Homedir | 
+|                |                        | (none if blank) |          |
+|----------------|------------------------|----------------------------|
+| NetLogo User 1 | <netlogo1@netlogo.com> | Secret          | netlogo1 |
+| NetLogo User 2 | <netlogo2@netlogo.com> |                 | netlogo1 |
+| NetLogo User 2 | <netlogo3@netlogo.com> | TopSecret       | netlogo2 |
+```
+
+This will generate the following files in netlogo1 and netlogo2:
+
++ pubring.gpg
++ secring.gpg
++ trustdb.gpg
+
+We then moved the public keys around
+```
+gpg --homedir netlogo1 --export netlogo1@netlogo.com > pub1
+gpg --homedir netlogo2 --import pub1
+
+gpg --homedir netlogo1 --export netlogo2@netlogo.com > pub2
+gpg --homedir netlogo2 --import pub2
+
+gpg --homedir netlogo2 --export netlogo1@netlogo.com > pub3
+gpg --homedir netlogo1 --import pub3
+```
+
+The following two files in this directory are the demonstation netlogo and gpg
+cotnains the jar for the plugin.
+
+demo.nlogo
+gpg
+
+The following is some random text encrypted with a symmetric key. The key being
+the word "aPassword".
+
+symmetric.gpg
+
+This was encrypted using:
+
+`gpg --symmetric --passphrase aPassword -o symmetric.gpg some_clear_text.txt`
+
+The following is some random text encrypted for recipients:
+
+ppk.ppg
+
+for the following keys.
+
+```
+| Uid            | email                  |
+|----------------|------------------------|
+| NetLogo User 1 | <netlogo1@netlogo.com> |
+| NetLogo User 2 | <netlogo2@netlogo.com> |
+| NetLogo User 3 | <netlogo3@netlogo.com> |
+```
 
 ## THINGS TO NOTICE
 
