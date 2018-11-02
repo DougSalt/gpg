@@ -76,3 +76,6 @@ package
 release
 netlogo
 exit
+compile
+package
+exit

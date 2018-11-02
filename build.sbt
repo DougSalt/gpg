@@ -4,9 +4,9 @@ lazy val gpg = (project in file("."))
     scalaVersion := "2.12.6",
     packageOptions in (Compile, packageBin) +=  {
       val file = new java.io.File("manifest.txt")
-        val manifest = Using.fileInputStream(file)( in => new java.util.jar.Manifest(in) )
-          Package.JarManifest( manifest )
-          }
+      val manifest = Using.fileInputStream(file)( in => new java.util.jar.Manifest(in) )
+      Package.JarManifest( manifest )
+    }
   )
 
 lazy val release = taskKey[Unit]("Execute release script")
