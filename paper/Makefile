@@ -1,7 +1,3 @@
-AUTHOR_1 = Doug Salt\textsuperscript{OrcID: 0000-0001-5186-9388}
-AUTHOR_2 = Gary Polhill\textsuperscript{OrcID: 0000-0002-8596-0590}
-
-TITLE = A NetLogo plug-in to secure data using GNUs Pretty Good Privacy software suite
 INSTITUTE_1=The James Hutton Institute, Craigiebuckler, \
 Aberdeen, AB15 8QH, \
 Scotland UK \
@@ -38,24 +34,18 @@ pdf: paper.md
 	@echo pandoc \
 		--from markdown $(WINDOWS) \
 		--to latex \
-		--variable title="$(TITLE)" \
-		--variable author="$(AUTHOR_1) \and $(AUTHOR_2)" \
-		--variable institute="\"${INSTITUTE_1}\"" \
 		--filter pandoc-crossref \
 		--bibliography=library.bib \
-		--output "${TITLE}".pdf \
+		--output paper.pdf \
 		--columns=50 \
 	    --variable classoption="twocolumn" \
 		"./paper.md"
 	pandoc \
 		--from markdown $(WINDOWS) \
 		--to latex \
-		--variable title="$(TITLE)" \
-		--variable author="$(AUTHOR_1) \and $(AUTHOR_2)" \
-		--variable institute="\"${INSTITUTE_1}\"" \
 		--bibliography=library.bib \
 		--columns=50 \
-		--output "${TITLE}".pdf \
+		--output paper.pdf \
 	    --variable classoption="twocolumn" \
 		"./paper.md"
 
