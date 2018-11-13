@@ -159,7 +159,8 @@ primitives:
 + `gpg:at-end?`
 + `gpg:close`
 
-The normal flow would look like that shown in [@fig:flow]
+The normal flow would look like that shown in [@fig:flow]. We have tried to
+keep the operational semantics as natural and terse as we can make them.
 
 ![Typical extension flow](img/flow.png){#fig:flow}
 
@@ -182,18 +183,22 @@ extensions directory of the NetLogo installation. This is normally:
 + On Linux, or other *nix: the app/extensions subdirectory of the NetLogo
   directory extracted from the installation .tgz
 
-Or, alternatively it can be placed in the same directory as the source for the
-NetLogo model if the extension is not to be used globally.
+Or, alternatively it can be placed in a sub-directory with the same name as the
+extension in the  same directory as the source for the NetLogo model if the
+extension is not to be used globally. So for instance, this extension is known
+as `gpg` so if the model `example.nlogo` was placed in the the directory
+`/data/models` the extension would have the path `/data/models/gpg/gpg.jar`.
 
-The extension is invoked in the NetLogo code by adding the keyword `gpg` to the extensions keyword beginning the NetLogo model code.
+The extension is invoked in the NetLogo code by adding the keyword `gpg` to the
+extensions keyword beginning the NetLogo model code.
 
 ## `gpg:command`
 
 This sets the path of the `gpg` command if the `gpg` command is not in `$PATH`
 for *nix system or `%PATH%` for Windows based systems. Its also allows the
-specification of additional parameters to gpg, such as specifying a different
-keyring location for `gnupg`. This can be called multiple times. Only the steps
-subsequent to the call will be affected.
+specification of additional parameters to `gpg`. This should not be needed. The
+only parameters that should require changing are the home directory containing
+the keyring
 
 Some examples might be
 
