@@ -10,21 +10,8 @@
 [0m[[0mdebug[0m] [0mdependency descriptor has been mediated: MergedDescriptors(dependency: org.scala-lang#scala-library;2.12.3 {scala-tool=[default, optional(default)]},dependency: org.scala-lang#scala-library;2.12.3 {compile=[default(compile)]}) => dependency: org.scala-lang#scala-library;2.12.3 {scala-tool=[default, optional(default)], compile=[default(compile)]}[0m
 [0m[[0minfo[0m] [0mResolving org.scala-lang#scala-library;2.12.3 ...[0m
 [0m[[0mdebug[0m] [0msbt-chain: Checking cache for: dependency: org.scala-lang#scala-library;2.12.3 {scala-tool=[default, optional(default)], compile=[default(compile)]}[0m
-[0m[[0minfo[0m] [0mResolving org.scala-lang#scala-library;2.12.3 ...[0m
-[0m[[0mdebug[0m] [0msbt-chain-delegate: Checking cache for: dependency: org.scala-lang#scala-library;2.12.3 {scala-tool=[default, optional(default)], compile=[default(compile)]}[0m
-[0m[[0mdebug[0m] [0m		tried /home/ds42723/.ivy2/local/org.scala-lang/scala-library/2.12.3/ivys/ivy.xml[0m
-[0m[[0mdebug[0m] [0m	local: no ivy file found for org.scala-lang#scala-library;2.12.3[0m
-[0m[[0mdebug[0m] [0m		tried https://repo1.maven.org/maven2/org/scala-lang/scala-library/2.12.3/scala-library-2.12.3.pom[0m
-[0m[[0mdebug[0m] [0m	public: found md file for org.scala-lang#scala-library;2.12.3[0m
-[0m[[0mdebug[0m] [0m		=> https://repo1.maven.org/maven2/org/scala-lang/scala-library/2.12.3/scala-library-2.12.3.pom (2.12.3)[0m
-[0m[[0mdebug[0m] [0mdownloading https://repo1.maven.org/maven2/org/scala-lang/scala-library/2.12.3/scala-library-2.12.3.pom ...[0m
-[0m[[0mdebug[0m] [0m	public: downloading https://repo1.maven.org/maven2/org/scala-lang/scala-library/2.12.3/scala-library-2.12.3.pom[0m
-[0m[[0mdebug[0m] [0m	public: downloading https://repo1.maven.org/maven2/org/scala-lang/scala-library/2.12.3/scala-library-2.12.3.pom.sha1[0m
-[0m[[0mdebug[0m] [0msha1 OK for https://repo1.maven.org/maven2/org/scala-lang/scala-library/2.12.3/scala-library-2.12.3.pom[0m
-[0m[[0mdebug[0m] [0m	[SUCCESSFUL ] org.scala-lang#scala-library;2.12.3!scala-library.pom(pom.original) (127ms)[0m
-[0m[[0mdebug[0m] [0m		tried /home/ds42723/.ivy2/local/org.scala-lang/scala-library/2.12.3/jars/scala-library.jar[0m
-[0m[[0mdebug[0m] [0m		tried https://repo1.maven.org/maven2/org/scala-lang/scala-library/2.12.3/scala-library-2.12.3.jar[0m
-[0m[[0mdebug[0m] [0m	found org.scala-lang#scala-library;2.12.3 in public[0m
+[0m[[0mdebug[0m] [0msbt-chain: module revision found in cache: org.scala-lang#scala-library;2.12.3[0m
+[0m[[0mdebug[0m] [0m	found org.scala-lang#scala-library;2.12.3 in sbt-chain[0m
 [0m[[0mdebug[0m] [0m	[2.12.3] org.scala-lang#scala-library;2.12.3[0m
 [0m[[0mdebug[0m] [0m== resolving dependencies gpg#gpg_2.12;0.1-SNAPSHOT->org.scala-lang#scala-library;2.12.3 [compile->runtime][0m
 [0m[[0mdebug[0m] [0m== resolving dependencies gpg#gpg_2.12;0.1-SNAPSHOT->org.scala-lang#scala-library;2.12.3 [compile->compile][0m
@@ -130,21 +117,8 @@
 [0m[[0mdebug[0m] [0mdependency descriptor has been mediated: MergedDescriptors(dependency: org.scala-lang#scala-library;2.12.3 {scala-tool=[default, optional(default)]},dependency: org.scala-lang#scala-library;2.12.3 {compile=[default(compile)]}) => dependency: org.scala-lang#scala-library;2.12.3 {scala-tool=[default, optional(default)], compile=[default(compile)]}[0m
 [0m[[0minfo[0m] [0mResolving org.scala-lang#scala-compiler;2.12.3 ...[0m
 [0m[[0mdebug[0m] [0msbt-chain: Checking cache for: dependency: org.scala-lang#scala-compiler;2.12.3 {scala-tool=[default, optional(default)]}[0m
-[0m[[0minfo[0m] [0mResolving org.scala-lang#scala-compiler;2.12.3 ...[0m
-[0m[[0mdebug[0m] [0msbt-chain-delegate: Checking cache for: dependency: org.scala-lang#scala-compiler;2.12.3 {scala-tool=[default, optional(default)]}[0m
-[0m[[0mdebug[0m] [0m		tried /home/ds42723/.ivy2/local/org.scala-lang/scala-compiler/2.12.3/ivys/ivy.xml[0m
-[0m[[0mdebug[0m] [0m	local: no ivy file found for org.scala-lang#scala-compiler;2.12.3[0m
-[0m[[0mdebug[0m] [0m		tried https://repo1.maven.org/maven2/org/scala-lang/scala-compiler/2.12.3/scala-compiler-2.12.3.pom[0m
-[0m[[0mdebug[0m] [0m	public: found md file for org.scala-lang#scala-compiler;2.12.3[0m
-[0m[[0mdebug[0m] [0m		=> https://repo1.maven.org/maven2/org/scala-lang/scala-compiler/2.12.3/scala-compiler-2.12.3.pom (2.12.3)[0m
-[0m[[0mdebug[0m] [0mdownloading https://repo1.maven.org/maven2/org/scala-lang/scala-compiler/2.12.3/scala-compiler-2.12.3.pom ...[0m
-[0m[[0mdebug[0m] [0m	public: downloading https://repo1.maven.org/maven2/org/scala-lang/scala-compiler/2.12.3/scala-compiler-2.12.3.pom[0m
-[0m[[0mdebug[0m] [0m	public: downloading https://repo1.maven.org/maven2/org/scala-lang/scala-compiler/2.12.3/scala-compiler-2.12.3.pom.sha1[0m
-[0m[[0mdebug[0m] [0msha1 OK for https://repo1.maven.org/maven2/org/scala-lang/scala-compiler/2.12.3/scala-compiler-2.12.3.pom[0m
-[0m[[0mdebug[0m] [0m	[SUCCESSFUL ] org.scala-lang#scala-compiler;2.12.3!scala-compiler.pom(pom.original) (121ms)[0m
-[0m[[0mdebug[0m] [0m		tried /home/ds42723/.ivy2/local/org.scala-lang/scala-compiler/2.12.3/jars/scala-compiler.jar[0m
-[0m[[0mdebug[0m] [0m		tried https://repo1.maven.org/maven2/org/scala-lang/scala-compiler/2.12.3/scala-compiler-2.12.3.jar[0m
-[0m[[0mdebug[0m] [0m	found org.scala-lang#scala-compiler;2.12.3 in public[0m
+[0m[[0mdebug[0m] [0msbt-chain: module revision found in cache: org.scala-lang#scala-compiler;2.12.3[0m
+[0m[[0mdebug[0m] [0m	found org.scala-lang#scala-compiler;2.12.3 in sbt-chain[0m
 [0m[[0mdebug[0m] [0m== resolving dependencies gpg#gpg_2.12;0.1-SNAPSHOT->org.scala-lang#scala-compiler;2.12.3 [scala-tool->runtime][0m
 [0m[[0mdebug[0m] [0m== resolving dependencies gpg#gpg_2.12;0.1-SNAPSHOT->org.scala-lang#scala-compiler;2.12.3 [scala-tool->compile][0m
 [0m[[0mdebug[0m] [0mdependency descriptor has been mediated: dependency: org.scala-lang#scala-library;2.12.3 {compile=[compile(*), master(compile)], runtime=[runtime(*)]} => dependency: org.scala-lang#scala-library;2.12.3 {compile=[compile(*), master(compile)], runtime=[runtime(*)]}[0m
@@ -185,21 +159,8 @@
 [0m[[0mdebug[0m] [0mdependency descriptor has been mediated: MergedDescriptors(dependency: org.scala-lang#scala-library;2.12.3 {scala-tool=[default, optional(default)]},dependency: org.scala-lang#scala-library;2.12.3 {compile=[default(compile)]}) => dependency: org.scala-lang#scala-library;2.12.3 {scala-tool=[default, optional(default)], compile=[default(compile)]}[0m
 [0m[[0minfo[0m] [0mResolving org.scala-lang#scala-reflect;2.12.3 ...[0m
 [0m[[0mdebug[0m] [0msbt-chain: Checking cache for: dependency: org.scala-lang#scala-reflect;2.12.3 {compile=[compile(*), master(compile)], runtime=[runtime(*)]}[0m
-[0m[[0minfo[0m] [0mResolving org.scala-lang#scala-reflect;2.12.3 ...[0m
-[0m[[0mdebug[0m] [0msbt-chain-delegate: Checking cache for: dependency: org.scala-lang#scala-reflect;2.12.3 {compile=[compile(*), master(compile)], runtime=[runtime(*)]}[0m
-[0m[[0mdebug[0m] [0m		tried /home/ds42723/.ivy2/local/org.scala-lang/scala-reflect/2.12.3/ivys/ivy.xml[0m
-[0m[[0mdebug[0m] [0m	local: no ivy file found for org.scala-lang#scala-reflect;2.12.3[0m
-[0m[[0mdebug[0m] [0m		tried https://repo1.maven.org/maven2/org/scala-lang/scala-reflect/2.12.3/scala-reflect-2.12.3.pom[0m
-[0m[[0mdebug[0m] [0m	public: found md file for org.scala-lang#scala-reflect;2.12.3[0m
-[0m[[0mdebug[0m] [0m		=> https://repo1.maven.org/maven2/org/scala-lang/scala-reflect/2.12.3/scala-reflect-2.12.3.pom (2.12.3)[0m
-[0m[[0mdebug[0m] [0mdownloading https://repo1.maven.org/maven2/org/scala-lang/scala-reflect/2.12.3/scala-reflect-2.12.3.pom ...[0m
-[0m[[0mdebug[0m] [0m	public: downloading https://repo1.maven.org/maven2/org/scala-lang/scala-reflect/2.12.3/scala-reflect-2.12.3.pom[0m
-[0m[[0mdebug[0m] [0m	public: downloading https://repo1.maven.org/maven2/org/scala-lang/scala-reflect/2.12.3/scala-reflect-2.12.3.pom.sha1[0m
-[0m[[0mdebug[0m] [0msha1 OK for https://repo1.maven.org/maven2/org/scala-lang/scala-reflect/2.12.3/scala-reflect-2.12.3.pom[0m
-[0m[[0mdebug[0m] [0m	[SUCCESSFUL ] org.scala-lang#scala-reflect;2.12.3!scala-reflect.pom(pom.original) (118ms)[0m
-[0m[[0mdebug[0m] [0m		tried /home/ds42723/.ivy2/local/org.scala-lang/scala-reflect/2.12.3/jars/scala-reflect.jar[0m
-[0m[[0mdebug[0m] [0m		tried https://repo1.maven.org/maven2/org/scala-lang/scala-reflect/2.12.3/scala-reflect-2.12.3.jar[0m
-[0m[[0mdebug[0m] [0m	found org.scala-lang#scala-reflect;2.12.3 in public[0m
+[0m[[0mdebug[0m] [0msbt-chain: module revision found in cache: org.scala-lang#scala-reflect;2.12.3[0m
+[0m[[0mdebug[0m] [0m	found org.scala-lang#scala-reflect;2.12.3 in sbt-chain[0m
 [0m[[0mdebug[0m] [0m	[2.12.3] org.scala-lang#scala-reflect;2.12.3[0m
 [0m[[0mdebug[0m] [0mdependency descriptor has been mediated: dependency: org.scala-lang#scala-library;2.12.3 {compile=[compile(*), master(compile)], runtime=[runtime(*)]} => dependency: org.scala-lang#scala-library;2.12.3 {compile=[compile(*), master(compile)], runtime=[runtime(*)]}[0m
 [0m[[0mdebug[0m] [0m== resolving dependencies org.scala-lang#scala-compiler;2.12.3->org.scala-lang#scala-reflect;2.12.3 [compile->compile(*)][0m
@@ -300,27 +261,12 @@
 [0m[[0mdebug[0m] [0mignoring unhandled DependencyDescriptorMediator: class sbt.IvyScala$OverrideScalaMediator[0m
 [0m[[0mdebug[0m] [0m	resolved ivy file produced in cache[0m
 [0m[[0mdebug[0m] [0m:: downloading artifacts ::[0m
-[0m[[0mdebug[0m] [0m		tried https://repo1.maven.org/maven2/org/scala-lang/scala-library/2.12.3/scala-library-2.12.3.jar[0m
-[0m[[0minfo[0m] [0mdownloading https://repo1.maven.org/maven2/org/scala-lang/scala-library/2.12.3/scala-library-2.12.3.jar ...[0m
-[0m[[0mdebug[0m] [0m	public: downloading https://repo1.maven.org/maven2/org/scala-lang/scala-library/2.12.3/scala-library-2.12.3.jar[0m
-[0m[[0mdebug[0m] [0m	public: downloading https://repo1.maven.org/maven2/org/scala-lang/scala-library/2.12.3/scala-library-2.12.3.jar.sha1[0m
-[0m[[0mdebug[0m] [0msha1 OK for https://repo1.maven.org/maven2/org/scala-lang/scala-library/2.12.3/scala-library-2.12.3.jar[0m
-[0m[[0minfo[0m] [0m	[SUCCESSFUL ] org.scala-lang#scala-library;2.12.3!scala-library.jar (1085ms)[0m
-[0m[[0mdebug[0m] [0m		tried https://repo1.maven.org/maven2/org/scala-lang/scala-compiler/2.12.3/scala-compiler-2.12.3.jar[0m
-[0m[[0minfo[0m] [0mdownloading https://repo1.maven.org/maven2/org/scala-lang/scala-compiler/2.12.3/scala-compiler-2.12.3.jar ...[0m
-[0m[[0mdebug[0m] [0m	public: downloading https://repo1.maven.org/maven2/org/scala-lang/scala-compiler/2.12.3/scala-compiler-2.12.3.jar[0m
-[0m[[0mdebug[0m] [0m	public: downloading https://repo1.maven.org/maven2/org/scala-lang/scala-compiler/2.12.3/scala-compiler-2.12.3.jar.sha1[0m
-[0m[[0mdebug[0m] [0msha1 OK for https://repo1.maven.org/maven2/org/scala-lang/scala-compiler/2.12.3/scala-compiler-2.12.3.jar[0m
-[0m[[0minfo[0m] [0m	[SUCCESSFUL ] org.scala-lang#scala-compiler;2.12.3!scala-compiler.jar (1737ms)[0m
-[0m[[0mdebug[0m] [0m		tried https://repo1.maven.org/maven2/org/scala-lang/scala-reflect/2.12.3/scala-reflect-2.12.3.jar[0m
-[0m[[0minfo[0m] [0mdownloading https://repo1.maven.org/maven2/org/scala-lang/scala-reflect/2.12.3/scala-reflect-2.12.3.jar ...[0m
-[0m[[0mdebug[0m] [0m	public: downloading https://repo1.maven.org/maven2/org/scala-lang/scala-reflect/2.12.3/scala-reflect-2.12.3.jar[0m
-[0m[[0mdebug[0m] [0m	public: downloading https://repo1.maven.org/maven2/org/scala-lang/scala-reflect/2.12.3/scala-reflect-2.12.3.jar.sha1[0m
-[0m[[0mdebug[0m] [0msha1 OK for https://repo1.maven.org/maven2/org/scala-lang/scala-reflect/2.12.3/scala-reflect-2.12.3.jar[0m
-[0m[[0minfo[0m] [0m	[SUCCESSFUL ] org.scala-lang#scala-reflect;2.12.3!scala-reflect.jar (711ms)[0m
+[0m[[0mdebug[0m] [0m	[NOT REQUIRED] org.scala-lang#scala-library;2.12.3!scala-library.jar[0m
+[0m[[0mdebug[0m] [0m	[NOT REQUIRED] org.scala-lang#scala-compiler;2.12.3!scala-compiler.jar[0m
+[0m[[0mdebug[0m] [0m	[NOT REQUIRED] org.scala-lang#scala-reflect;2.12.3!scala-reflect.jar[0m
 [0m[[0mdebug[0m] [0m	[NOT REQUIRED] org.scala-lang.modules#scala-xml_2.12;1.0.6!scala-xml_2.12.jar(bundle)[0m
 [0m[[0mdebug[0m] [0m	[NOT REQUIRED] jline#jline;2.14.4!jline.jar[0m
-[0m[[0mdebug[0m] [0m:: resolution report :: resolve 1416ms :: artifacts dl 3540ms[0m
+[0m[[0mdebug[0m] [0m:: resolution report :: resolve 626ms :: artifacts dl 36ms[0m
 [0m[[0mdebug[0m] [0m	report for gpg#gpg_2.12;0.1-SNAPSHOT compile produced in /home/ds42723/git/gpg/target/scala-2.12/resolution-cache/reports/gpg-gpg_2.12-compile.xml[0m
 [0m[[0mdebug[0m] [0m	report for gpg#gpg_2.12;0.1-SNAPSHOT runtime produced in /home/ds42723/git/gpg/target/scala-2.12/resolution-cache/reports/gpg-gpg_2.12-runtime.xml[0m
 [0m[[0mdebug[0m] [0m	report for gpg#gpg_2.12;0.1-SNAPSHOT test produced in /home/ds42723/git/gpg/target/scala-2.12/resolution-cache/reports/gpg-gpg_2.12-test.xml[0m
@@ -334,5 +280,5 @@
 [0m[[0mdebug[0m] [0m	report for gpg#gpg_2.12;0.1-SNAPSHOT docs produced in /home/ds42723/git/gpg/target/scala-2.12/resolution-cache/reports/gpg-gpg_2.12-docs.xml[0m
 [0m[[0mdebug[0m] [0m	report for gpg#gpg_2.12;0.1-SNAPSHOT pom produced in /home/ds42723/git/gpg/target/scala-2.12/resolution-cache/reports/gpg-gpg_2.12-pom.xml[0m
 [0m[[0mdebug[0m] [0m	report for gpg#gpg_2.12;0.1-SNAPSHOT scala-tool produced in /home/ds42723/git/gpg/target/scala-2.12/resolution-cache/reports/gpg-gpg_2.12-scala-tool.xml[0m
-[0m[[0mdebug[0m] [0m	resolve done (1416ms resolve - 3540ms download)[0m
+[0m[[0mdebug[0m] [0m	resolve done (626ms resolve - 36ms download)[0m
 [0m[[0minfo[0m] [0mDone updating.[0m

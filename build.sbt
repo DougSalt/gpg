@@ -6,6 +6,9 @@ lazy val gpg = (project in file("."))
       val file = new java.io.File("manifest.txt")
       val manifest = Using.fileInputStream(file)( in => new java.util.jar.Manifest(in) )
       Package.JarManifest( manifest )
+    },
+    artifactName := { (sv: ScalaVersion, module: ModuleID, artifact: Artifact) =>
+        artifact.name + "." + artifact.extension
     }
   )
 
@@ -22,7 +25,7 @@ release:= {
 
 lazy val netlogo = taskKey[Unit]("Execute nlogo")
 netlogo := {
-   val os = {"uname" !!}.stripLineEnd
+    val os = {"uname" !!}.stripLineEnd
     println("OS = " + os)
     if ( os == "Linux" ) {
       "./run.sh" !

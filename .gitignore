@@ -28,6 +28,7 @@ tex2pdf.*
 # Bibtex stuff
 
 *.bib.bak
-bin/
+
+# Sbt stuff
+
 target/
-project/

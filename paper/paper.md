@@ -151,15 +151,69 @@ small and requires the installation of just one jar file. The extension is
 written in Scala [@] and built using sbt[@] and consists of the following
 primitives:
 
-+ gpg:command
-+ gpg:attach
-+ gpg:open
-+ gpg:at-end?
-+ gpg:close
++ `gpg:command`
++ `gpg:passphrase`
++ `gpg:attach`
++ `gpg:decrypt`
++ `gpg:read-line`
++ `gpg:at-end?`
++ `gpg:detach`
 
-The installation jar can be found at  https://gitlab.com:doug.salt/gpg.git
+The normal flow would look like that shown in [@fig:flow]
 
-# Illustration
+![Typical extension flow](img/flow.png){#fig:flow}
+
+The installation jar can be found at  https://gitlab.com:doug.salt/gpg.git. The
+file
+
+`target/scala-2.12/gpg_2.12-0.1-SNAPSHOT.jar`
+
+shoud be copied to a file named gpg.jar. This file should be placed in  the
+extensions directory of the NetLogo installation. This is normally:
+
++ On Mac OS X: `/Applications/NetLogo 6.0.4/extensions`
+
++ On 64-bit Windows with 64-bit NetLogo or 32-bit Windows with 32-bit NetLogo:
+  `C:\Program Files\NetLogo 6.0.4\app\extensions`
+
++ On 64-bit Windows with 32-bit NetLogo: 
+  `C:\Program Files (x86)\NetLogo 6.0.4\app\extensions`
+
++ On Linux, or other *nix: the app/extensions subdirectory of the NetLogo
+  directory extracted from the installation .tgz
+
+Or, alternatively it can be placed in the same directory as the source for the
+NetLogo model if the extension is not to be used globally.
+
+The extension is invoked in the NetLogo code by adding the keyword `gpg` to the extensions keyword beginning the NetLogo model code.
+
+## `gpg:command`
+
+This sets the path of the `gpg` command if the `gpg` command is not in `$PATH`
+for *nix system or `%PATH%` for Windows based systems. Its also allows the
+specification of additional parameters to gpg, such as specifying a different
+keyring location for `gnupg`. This can be called multiple times. Only the steps
+subsequent to the call will be affected.
+
+Some examples might be
+
+```
+gpg:command "/usr/bin/gpg"
+```
+
+or
+
+```
+gpg:command "
+
+##  `gpg:passphrase`
+##  `gpg:open`
+##  `gpg:read-line`
+##  `gpg:at-end?`
+##  `gpg:close`
+
+
+# Illustrations
 
 ## Symmetric encryption
 

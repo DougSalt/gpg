@@ -43,6 +43,7 @@ pdf: paper.md
 	pandoc \
 		--from markdown $(WINDOWS) \
 		--to latex \
+		--filter pandoc-crossref \
 		--bibliography=library.bib \
 		--columns=50 \
 		--output paper.pdf \
