@@ -151,7 +151,7 @@ small and requires the installation of just one jar file. The extension is
 written in Scala [@] and built using sbt[@] and consists of the following
 primitives:
 
-+ `gpg:command`
++ `gpg:cmd`
 + `gpg:home`
 + `gpg:open`
 + `gpg:open-with-passphrase`
@@ -167,9 +167,9 @@ keep the operational semantics as natural and terse as we can make them.
 The installation jar can be found at  https://gitlab.com:doug.salt/gpg.git. The
 file
 
-`target/scala-2.12/gpg_2.12-0.1-SNAPSHOT.jar`
+`target/scala-2.12/gpg.jar`
 
-shoud be copied to a file named gpg.jar. This file should be placed in  the
+should be copied to a file named gpg.jar. This file should be placed in  the
 extensions directory of the NetLogo installation. This is normally:
 
 + On Mac OS X: `/Applications/NetLogo 6.0.4/extensions`
@@ -186,31 +186,45 @@ extensions directory of the NetLogo installation. This is normally:
 Or, alternatively it can be placed in a sub-directory with the same name as the
 extension in the  same directory as the source for the NetLogo model if the
 extension is not to be used globally. So for instance, this extension is known
-as `gpg` so if the model `example.nlogo` was placed in the the directory
+as `gpg` so if the model `example.nlogo` was placed in the directory
 `/data/models` the extension would have the path `/data/models/gpg/gpg.jar`.
 
 The extension is invoked in the NetLogo code by adding the keyword `gpg` to the
 extensions keyword beginning the NetLogo model code.
 
-## `gpg:command`
+## `gpg:cmd`
 
 This sets the path of the `gpg` command if the `gpg` command is not in `$PATH`
 for *nix system or `%PATH%` for Windows based systems. Its also allows the
 specification of additional parameters to `gpg`. This should not be needed. The
 only parameters that should require changing are the home directory containing
-the keyring
+the keyring. However, this can also be done using `gpg:home`. This multiple way
+of achieving the same end is due to OS sensitivity over paths.  `gpg:home`
+provides an operating system agnostic method of specifying the keyring
+directory. However this does provide flexibility to replace the `gpg` command,
+wrap it, or replace it with something else. This may appear to be a security
+weakness, and indeed it is, but the choice of calling the program externally to
+NetLogo implies that this can be done without `gpg:cmd`. That is, it is easy to
+replace the `gpg` binary with something nefarious. This also applies to any
+non-static library that NetLogo makes use of. So, although not air-tight
+security, this does offer "reasonable" security.
 
-Some examples might be
+Some examples of the invocation of this command might be
 
 ```
-gpg:command "/usr/bin/gpg"
+gpg:cmd "/opt/gpg/bin/gpg"
 ```
 
 or
 
 ```
-gpg:command "
+gpg:cmd "gpg --
 ```
+
+Note, the state of execution string will persist, and not reset until the next
+invocation of `gpg:cmd`. The command can be cleared to default by using
+
+`gpg:cmd ""`
 
 ##  `gpg:home`
 ##  `gpg:open-with-passphrase`
@@ -226,6 +240,11 @@ gpg:command "
 
 ## Asymmetric encryption
 
+This is the most powerful facility of GPG. Asymmetric encryption offers the
+ability for specific individuals to have unique keys allowing them and only them to
+decrypt the file. This is achieved by encrypting the file with the public key of the recepient, so only the private key of the receipient can then unencrypt the cryptogram. This makes this form of encryption enormously secure.
+
+## Reading an assymetrically encoded CSV file
 
 # Discussion and conclusions
 
@@ -255,7 +274,12 @@ Specifically designed for GNUPG - there might be other encryption packages out t
 
 This is still to complicated for non-technical users.
 
-This is susceptible to memory sniffing attacks.
+This is susceptible to memory sniffing attacks. These can be mitigated by
+encrypting swap, but if the key is in the clear anywhere in memory, then there
+is always a chance that it can be obtained. This will always be a weakness of
+any encryption system that is computerised*
+
+* _And why digital-rights management by way of encryption will always fail._
 
 # Acknowledgements
 # Bibliography
