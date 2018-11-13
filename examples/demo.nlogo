@@ -1,8 +1,8 @@
 extensions [gpg csv]
 
 to symmetric_decryption_no_passphrase
-  let file gpg:attach cryptogram
-  gpg:open file
+  gpg:home ""
+  let file gpg:open cryptogram
   while [ not (gpg:at-end? file) ] [
     output-show gpg:read-line file
   ]
@@ -10,9 +10,8 @@ to symmetric_decryption_no_passphrase
 end
 
 to symmetric_decryption_with_passphrase
-  let file gpg:attach cryptogram
-  gpg:passphrase file passphrase
-  gpg:open file
+  gpg:home ""
+  let file gpg:open-with-passphrase cryptogram passphrase
   while [ not (gpg:at-end? file) ] [
     output-show gpg:read-line file
   ]
@@ -21,8 +20,7 @@ end
 
 to ppk_no_passphrase_fails
   gpg:home "netlogo2"
-  let file gpg:attach cryptogram
-  gpg:open file
+  let file gpg:open cryptogram
   while [ not (gpg:at-end? file) ] [
     output-show gpg:read-line file
   ]
@@ -31,8 +29,7 @@ end
 
 to ppk_no_passphrase_works
   gpg:home "netlogo1"
-  let file gpg:attach cryptogram
-  gpg:open file
+  let file gpg:open cryptogram
   while [ not (gpg:at-end? file) ] [
     output-show gpg:read-line file
   ]
@@ -41,9 +38,7 @@ end
 
 to ppk_with_passphrase_works
   gpg:home "netlogo2"
-  let file gpg:attach cryptogram
-  gpg:passphrase file passphrase
-  gpg:open file
+  let file gpg:open-with-passphrase cryptogram passphrase
   while [ not (gpg:at-end? file) ] [
     output-show gpg:read-line file
   ]
@@ -80,9 +75,9 @@ ticks
 BUTTON
 19
 90
-271
+369
 124
-Symmetric decryption - no passphrase
+Symmetric decryption - no passphrase - fails
 symmetric_decryption_no_passphrase\n; This should always fail
 NIL
 1
@@ -100,24 +95,24 @@ INPUTBOX
 273
 70
 passphrase
-TopSecret
+aPassword
 1
 0
 String
 
 OUTPUT
-22
-291
-718
-366
+19
+319
+715
+394
 10
 
 BUTTON
 20
 129
-269
+368
 162
-Symmetric decryption with password
+Symmetric decryption with password - works
 symmetric_decryption_with_passphrase\n; this should work with\n; + the file: symmetric.gpg\n; + the password: aPassword
 NIL
 1
@@ -130,10 +125,10 @@ NIL
 1
 
 BUTTON
-330
-87
-577
-120
+21
+177
+268
+210
 PPK with no passphrase - fails
 ppk_no_passphrase_fails\n; Always fails
 NIL
@@ -164,10 +159,10 @@ NIL
 1
 
 BUTTON
-331
-127
-567
-160
+23
+265
+259
+298
 PPK no passphrase - works
 ppk_no_passphrase_works\n; This should work on:\n; + file:  ppk.gpg\n; + homedir: netlogo1
 NIL
@@ -188,23 +183,23 @@ CHOOSER
 cryptogram
 cryptogram
 "symmetric.gpg" "ppk.gpg"
-1
+0
 
 TEXTBOX
-26
-218
-677
-315
+381
+91
+603
+188
 Symmetric decryption with no password - this should always fail.\nSymmetric decryption will work with the password \"aPassword\"  and the cryptogram \"symmetric.gpg\".
 11
 0.0
 1
 
 BUTTON
-332
-168
-568
-201
+21
+215
+257
+248
 PPK with passphrase - works
 ppk_with_passphrase_works
 NIL
@@ -215,6 +210,36 @@ NIL
 NIL
 NIL
 NIL
+1
+
+TEXTBOX
+279
+184
+545
+244
+Both these use the keyring in \"netlogo1\"  subdirectory work on the file ppk.gpg and have the passphrase \"TopSecret\"
+10
+0.0
+1
+
+TEXTBOX
+275
+269
+541
+308
+Has the keyring in \"netlogo2\" subdirectory, work on the file ppk.gpg  - this keyring has no passphrase.
+10
+0.0
+1
+
+TEXTBOX
+630
+298
+780
+316
+CLEAR TEXT
+14
+0.0
 1
 
 @#$#@#$#@

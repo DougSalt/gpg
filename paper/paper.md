@@ -152,12 +152,12 @@ written in Scala [@] and built using sbt[@] and consists of the following
 primitives:
 
 + `gpg:command`
-+ `gpg:passphrase`
-+ `gpg:attach`
-+ `gpg:decrypt`
++ `gpg:home`
++ `gpg:open`
++ `gpg:open-with-passphrase`
 + `gpg:read-line`
 + `gpg:at-end?`
-+ `gpg:detach`
++ `gpg:close`
 
 The normal flow would look like that shown in [@fig:flow]
 
@@ -205,8 +205,10 @@ or
 
 ```
 gpg:command "
+```
 
-##  `gpg:passphrase`
+##  `gpg:home`
+##  `gpg:open-with-passphrase`
 ##  `gpg:open`
 ##  `gpg:read-line`
 ##  `gpg:at-end?`

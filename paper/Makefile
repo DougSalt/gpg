@@ -31,15 +31,6 @@ all: pdf
 #	    img/example.odg
 
 pdf: paper.md
-	@echo pandoc \
-		--from markdown $(WINDOWS) \
-		--to latex \
-		--filter pandoc-crossref \
-		--bibliography=library.bib \
-		--output paper.pdf \
-		--columns=50 \
-	    --variable classoption="twocolumn" \
-		"./paper.md"
 	pandoc \
 		--from markdown $(WINDOWS) \
 		--to latex \
@@ -47,7 +38,7 @@ pdf: paper.md
 		--bibliography=library.bib \
 		--columns=50 \
 		--output paper.pdf \
-	    --variable classoption="twocolumn" \
+		--variable classoption="twocolumn" \
 		"./paper.md"
 
 html: paper.md 

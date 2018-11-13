@@ -4,7 +4,7 @@ import org.nlogo.api.ScalaConversions._
 import scala.collection.JavaConverters._
 import org.nlogo.api.Context
 import org.nlogo.core.Syntax
-import org.nlogo.core.Syntax.{ NumberType, ListType, BooleanType, StringType }
+import org.nlogo.core.Syntax.{ BooleanType, StringType, RepeatableType }
 import org.nlogo.nvm
 import scala.io.Source
 import scala.util.Random
@@ -16,9 +16,8 @@ import System.err.println
 
 class Encrypt extends DefaultClassManager {
   def load(manager: PrimitiveManager) {
-    manager.addPrimitive("attach", new Attach)
     manager.addPrimitive("open", new Open)
-    manager.addPrimitive("passphrase", new PassPhrase)
+    manager.addPrimitive("open-with-passphrase", new OpenWithPassPhrase)
     manager.addPrimitive("close", new Close)
     manager.addPrimitive("at-end?", new AtEnd)
     manager.addPrimitive("read-line", new ReadLine)
@@ -52,8 +51,8 @@ class Cmd extends Command {
   }
 }
 
-class Attach extends Reporter {
-  override def getSyntax = Syntax.reporterSyntax(right = List(StringType), ret = StringType)
+class Open extends Reporter {
+  override def getSyntax = Syntax.reporterSyntax(right = List(StringType) , ret = StringType)
   def report(args: Array[Argument], context: Context): AnyRef = {
     val path = try args(0).getString
     catch {
@@ -66,38 +65,67 @@ class Attach extends Reporter {
     }
     var ct = new ClearText(cryptogram)
     ClearTextStorage.store(ct)
+    // Decrypt it
+    ct.open
     ct.name
   }
 }
 
-class PassPhrase extends Command {
-  override def getSyntax = Syntax.commandSyntax(right = List(StringType, StringType))
-  def perform(args: Array[Argument], context: Context) = {
-    val cryptogram = try args(0).getString
+class OpenWithPassPhrase extends Reporter {
+  override def getSyntax = Syntax.reporterSyntax(right = List(StringType, StringType) , ret = StringType)
+  def report(args: Array[Argument], context: Context): AnyRef = {
+    val path = try args(0).getString
     catch {
       case e: LogoException =>
         throw new ExtensionException(e.getMessage)
     }
-    val passwd = try args(1).getString
+    val cryptogram = new File(context.workspace.getModelDir + "/" + path)
+    if (!cryptogram.exists()) {
+      throw new ExtensionException(cryptogram.toString() + " does not exist")
+    }
+    var ct = new ClearText(cryptogram)
+    val passphrase = try args(1).getString
     catch {
       case e: LogoException =>
         throw new ExtensionException(e.getMessage)
     }
-    ClearTextStorage.retrieve(cryptogram).setPassphrase(passwd)
+    ct.setPassphrase(passphrase)
+    ClearTextStorage.store(ct)
+    // Decrypt it
+    ct.open
+    ct.name
   }
 }
 
-class Open extends Command {
-  override def getSyntax = Syntax.reporterSyntax(right = List(StringType), ret = StringType)
-  def perform(args: Array[Argument], context: Context) = {
-    val cryptogram = try args(0).getString
-    catch {
-      case e: LogoException =>
-        throw new ExtensionException(e.getMessage)
-    }
-    ClearTextStorage.retrieve(cryptogram).open
-  }
-}
+
+//class PassPhrase extends Command {
+//  override def getSyntax = Syntax.commandSyntax(right = List(StringType, StringType))
+//  def perform(args: Array[Argument], context: Context) = {
+//    val cryptogram = try args(0).getString
+//    catch {
+//      case e: LogoException =>
+//        throw new ExtensionException(e.getMessage)
+//    }
+//    val passwd = try args(1).getString
+//    catch {
+//      case e: LogoException =>
+//        throw new ExtensionException(e.getMessage)
+//    }
+//    ClearTextStorage.retrieve(cryptogram).setPassphrase(passwd)
+//  }
+//}
+
+//class Open extends Command {
+//  override def getSyntax = Syntax.reporterSyntax(right = List(StringType), ret = StringType)
+//  def perform(args: Array[Argument], context: Context) = {
+//    val cryptogram = try args(0).getString
+//    catch {
+//      case e: LogoException =>
+//        throw new ExtensionException(e.getMessage)
+//    }
+//    ClearTextStorage.retrieve(cryptogram).open
+//  }
+//}
 
 class ReadLine extends Reporter {
   override def getSyntax = Syntax.reporterSyntax(right = List(StringType), ret = StringType)
@@ -152,6 +180,8 @@ class ClearText (var cryptogram: File) {
     // One of the differences between Linux and Windows. The character " is not absorbed in Linux
     if (passphrase != None ) {
       gpg += " --passphrase " + passphrase.get
+    } else {
+      gpg += " --passphrase ''"
     }
     if (GPGConfiguration.homedir != None) {
       gpg += " --homedir " + GPGConfiguration.homedir.get
