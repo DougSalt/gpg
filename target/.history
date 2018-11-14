@@ -23,3 +23,16 @@ package
 release
 netlogo
 exit
+compile
+package
+release
+netlogo
+compile
+package
+release
+nlogo
+netlogo
+;compile;package;release;netlogo
+;compile;package;release
+netlogo
+exit

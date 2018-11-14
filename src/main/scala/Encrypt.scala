@@ -28,31 +28,46 @@ class Encrypt extends DefaultClassManager {
 
 
 class Home extends Command {
-  override def getSyntax = Syntax.commandSyntax(right = List(StringType))
+  override def getSyntax = Syntax.commandSyntax(right = List(StringType | RepeatableType))
   def perform(args: Array[Argument], context: Context) = {
-    val cmdLine = try args(0).getString
-    catch {
-      case e: LogoException =>
-        throw new ExtensionException(e.getMessage)
+    if (args.length == 0 ) {
+      GPGConfiguration.resetHomeDir
+    } else {
+      val cmdLine = try args(0).getString
+      catch {
+        case e: LogoException =>
+          throw new ExtensionException(e.getMessage)
+      }
+      if (args.length > 1)
+        throw new ExtensionException("Too many arguments to 'home' " + args)
+      GPGConfiguration.setHomeDir(cmdLine, context)
     }
-    GPGConfiguration.setHomeDir(cmdLine, context)
   }
 }
 
 class Cmd extends Command {
-  override def getSyntax = Syntax.commandSyntax(right = List(StringType))
+  override def getSyntax = Syntax.commandSyntax(right = List(StringType | RepeatableType))
   def perform(args: Array[Argument], context: Context) = {
-    val cmdLine = try args(0).getString
-    catch {
-      case e: LogoException =>
-        throw new ExtensionException(e.getMessage)
+    if (args.length == 0 ) {
+      GPGConfiguration.set("gpg")
+    } else {
+      val cmdLine = try args(0).getString
+      catch {
+        case e: LogoException =>
+          throw new ExtensionException(e.getMessage)
+      }
+      if (args.length > 1)
+        throw new ExtensionException("Too many arguments to 'cmd' " + args)
+      if (cmdLine == "")
+        GPGConfiguration.set("gpg")
+      else
+        GPGConfiguration.set(cmdLine)
     }
-    GPGConfiguration.set(cmdLine)
   }
 }
 
 class Open extends Reporter {
-  override def getSyntax = Syntax.reporterSyntax(right = List(StringType) , ret = StringType)
+  override def getSyntax = Syntax.reporterSyntax(right = List(StringType | RepeatableType) , ret = StringType)
   def report(args: Array[Argument], context: Context): AnyRef = {
     val path = try args(0).getString
     catch {
@@ -63,8 +78,18 @@ class Open extends Reporter {
     if (!cryptogram.exists()) {
       throw new ExtensionException(cryptogram.toString() + " does not exist")
     }
-    var ct = new ClearText(cryptogram)
+    val ct = new ClearText(cryptogram)
     ClearTextStorage.store(ct)
+    if (args.length > 1) {
+      val passphrase = try args(1).getString
+      catch {
+        case e: LogoException =>
+          throw new ExtensionException(e.getMessage)
+      }
+      ct.setPassphrase(passphrase)
+      if (args.length > 2)
+        throw new ExtensionException("Too many arguments to open " + args)
+    }
     // Decrypt it
     ct.open
     ct.name
@@ -249,9 +274,10 @@ object GPGConfiguration {
     commandLine = cmd
     check()
   }
+  def resetHomeDir = {
+    homedir = None
+  }
   def setHomeDir(home: String, context: Context) {
-    // for ((k,v) <- System.getProperties.asScala)
-    //    Console.println(k + " = "  + v)
     var path = new File(home)
     if (path.exists)
         homedir = Some(path)

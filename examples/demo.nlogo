@@ -2,6 +2,7 @@ extensions [gpg csv]
 
 to symmetric_decryption_no_passphrase
   gpg:home ""
+  gpg:cmd ""
   let file gpg:open cryptogram
   while [ not (gpg:at-end? file) ] [
     output-show gpg:read-line file
@@ -10,8 +11,9 @@ to symmetric_decryption_no_passphrase
 end
 
 to symmetric_decryption_with_passphrase
-  gpg:home ""
-  let file gpg:open-with-passphrase cryptogram passphrase
+  (gpg:home)
+  gpg:cmd ""
+  let file (gpg:open cryptogram passphrase)
   while [ not (gpg:at-end? file) ] [
     output-show gpg:read-line file
   ]
@@ -28,7 +30,17 @@ to ppk_no_passphrase_fails
 end
 
 to ppk_no_passphrase_works
-  gpg:home "netlogo1"
+  ifelse environment = "Agnostic" [
+    gpg:home "netlogo1"
+    (gpg:cmd)
+  ] [ ifelse environment = "Unix" [
+    gpg:cmd "gpg --homedir ~/git/gpg/examples/netlogo1"
+    (gpg:home)
+    ] [
+      (gpg:home)
+      gpg:cmd "gpg --homedir \\users\\someusers"
+    ]
+  ]
   let file gpg:open cryptogram
   while [ not (gpg:at-end? file) ] [
     output-show gpg:read-line file
@@ -38,7 +50,7 @@ end
 
 to ppk_with_passphrase_works
   gpg:home "netlogo2"
-  let file gpg:open-with-passphrase cryptogram passphrase
+  let file (gpg:open cryptogram passphrase)
   while [ not (gpg:at-end? file) ] [
     output-show gpg:read-line file
   ]
@@ -183,7 +195,7 @@ CHOOSER
 cryptogram
 cryptogram
 "symmetric.gpg" "ppk.gpg"
-0
+1
 
 TEXTBOX
 381
@@ -241,6 +253,16 @@ CLEAR TEXT
 14
 0.0
 1
+
+CHOOSER
+409
+13
+547
+58
+environment
+environment
+"Unix" "Windows" "Agnostic"
+0
 
 @#$#@#$#@
 ## WHAT IS IT?
