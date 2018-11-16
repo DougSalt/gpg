@@ -12,7 +12,7 @@ end
 
 to symmetric_decryption_with_passphrase
   (gpg:home)
-  gpg:cmd ""
+  (gpg:cmd)
   let file (gpg:open cryptogram passphrase)
   while [ not (gpg:at-end? file) ] [
     output-show gpg:read-line file
@@ -30,17 +30,7 @@ to ppk_no_passphrase_fails
 end
 
 to ppk_no_passphrase_works
-  ifelse environment = "Agnostic" [
-    gpg:home "netlogo1"
-    (gpg:cmd)
-  ] [ ifelse environment = "Unix" [
-    gpg:cmd "gpg --homedir ~/git/gpg/examples/netlogo1"
-    (gpg:home)
-    ] [
-      (gpg:home)
-      gpg:cmd "gpg --homedir \\users\\someusers"
-    ]
-  ]
+  gpg:home "netlogo1"
   let file gpg:open cryptogram
   while [ not (gpg:at-end? file) ] [
     output-show gpg:read-line file
@@ -49,19 +39,29 @@ to ppk_no_passphrase_works
 end
 
 to ppk_with_passphrase_works
-  gpg:home "netlogo2"
+  set-environment "netlogo2"
   let file (gpg:open cryptogram passphrase)
   while [ not (gpg:at-end? file) ] [
     output-show gpg:read-line file
   ]
   gpg:close file
 end
+
+to set-environment [some-home-dir]
+  ifelse set-home-dir [
+    gpg:cmd (word "gpg --homedir " homedir)
+    (gpg:home)
+  ] [
+    gpg:home some-home-dir
+    (gpg:cmd)
+  ]
+end
 @#$#@#$#@
 GRAPHICS-WINDOW
-676
-15
-709
-49
+742
+217
+775
+251
 -1
 -1
 25.0
@@ -107,7 +107,7 @@ INPUTBOX
 273
 70
 passphrase
-aPassword
+TopSecret
 1
 0
 String
@@ -154,10 +154,10 @@ NIL
 1
 
 BUTTON
-280
-10
-380
-43
+718
+319
+818
+352
 NIL
 clear-output
 NIL
@@ -254,15 +254,27 @@ CLEAR TEXT
 0.0
 1
 
-CHOOSER
-409
-13
-547
-58
-environment
-environment
-"Unix" "Windows" "Agnostic"
+INPUTBOX
+427
+10
+700
+70
+homedir
+/home/ds42723/git/gpg/examples/netlogo1
+1
 0
+String
+
+SWITCH
+276
+10
+424
+43
+set-home-dir
+set-home-dir
+0
+1
+-1000
 
 @#$#@#$#@
 ## WHAT IS IT?
