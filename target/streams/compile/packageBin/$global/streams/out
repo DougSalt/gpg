@@ -2,8 +2,6 @@
 [0m[[0mdebug[0m] [0mInput file mappings:[0m
 [0m[[0mdebug[0m] [0m	GPGConfiguration.class[0m
 [0m[[0mdebug[0m] [0m	  /home/ds42723/git/gpg/target/scala-2.12/classes/GPGConfiguration.class[0m
-[0m[[0mdebug[0m] [0m	OpenWithPassPhrase.class[0m
-[0m[[0mdebug[0m] [0m	  /home/ds42723/git/gpg/target/scala-2.12/classes/OpenWithPassPhrase.class[0m
 [0m[[0mdebug[0m] [0m	AtEnd.class[0m
 [0m[[0mdebug[0m] [0m	  /home/ds42723/git/gpg/target/scala-2.12/classes/AtEnd.class[0m
 [0m[[0mdebug[0m] [0m	Encrypt.class[0m

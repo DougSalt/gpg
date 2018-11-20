@@ -36,3 +36,8 @@ netlogo
 ;compile;package;release
 netlogo
 exit
+compile
+package
+release
+netlogo
+exit

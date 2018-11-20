@@ -33,7 +33,11 @@ to ppk_no_passphrase_works
   gpg:home "netlogo1"
   let file gpg:open cryptogram
   while [ not (gpg:at-end? file) ] [
-    output-show gpg:read-line file
+    ifelse CSV [
+      output-show csv:from-row gpg:read-line file
+    ][
+      output-show gpg:read-line file
+    ]
   ]
   gpg:close file
 end
@@ -42,7 +46,11 @@ to ppk_with_passphrase_works
   set-environment "netlogo2"
   let file (gpg:open cryptogram passphrase)
   while [ not (gpg:at-end? file) ] [
-    output-show gpg:read-line file
+    ifelse CSV [
+      output-show csv:from-row gpg:read-line file
+    ][
+      output-show gpg:read-line file
+    ]
   ]
   gpg:close file
 end
@@ -137,10 +145,10 @@ NIL
 1
 
 BUTTON
-21
-177
-268
-210
+20
+174
+267
+207
 PPK with no passphrase - fails
 ppk_no_passphrase_fails\n; Always fails
 NIL
@@ -171,10 +179,10 @@ NIL
 1
 
 BUTTON
-23
-265
-259
-298
+21
+244
+257
+277
 PPK no passphrase - works
 ppk_no_passphrase_works\n; This should work on:\n; + file:  ppk.gpg\n; + homedir: netlogo1
 NIL
@@ -194,7 +202,7 @@ CHOOSER
 55
 cryptogram
 cryptogram
-"symmetric.gpg" "ppk.gpg"
+"symmetric.gpg" "ppk.gpg" "csv.gpg"
 1
 
 TEXTBOX
@@ -209,9 +217,9 @@ Symmetric decryption with no password - this should always fail.\nSymmetric decr
 
 BUTTON
 21
-215
+209
 257
-248
+242
 PPK with passphrase - works
 ppk_with_passphrase_works
 NIL
@@ -260,7 +268,7 @@ INPUTBOX
 700
 70
 homedir
-/home/ds42723/git/gpg/examples/netlogo1
+/home/ds42723/git/gpg/examples/netlogo2
 1
 0
 String
@@ -273,6 +281,17 @@ SWITCH
 set-home-dir
 set-home-dir
 0
+1
+-1000
+
+SWITCH
+276
+44
+379
+77
+CSV
+CSV
+1
 1
 -1000
 
