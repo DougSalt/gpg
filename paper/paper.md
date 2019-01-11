@@ -26,6 +26,7 @@ idea of the formatting required on this article
 
 -->
 
+
 # Introduction
 
 Cheap, publicly-accessible, distributed storage, colloquially known as the
@@ -77,7 +78,8 @@ decrypting such data is withheld then the original data can no longer be
 retrieved [@]. This is reasonably easy to achieve given that, with current
 technology  a brute-force attack on a 128 bit AES encoded data would take on
 average $1.02 \times 10_{18}$ years to work.
-(https://www.eetimes.com/document.asp?doc_id=1279619). Doubling the size of
+(https://www.eetimes.com/document.asp
+?doc_id=1279619). Doubling the size of
 this key to 256 bits is thought to effectively protect such data from proposed
 attacks such as those theoretically available if quantum computing proves to be
 successful [@].  Destroying or withdrawing the encryption key therefore
@@ -96,11 +98,16 @@ the encryption themselves.
 
 Having established the need for encryption, the remainder of this paper will
 describe the installation and usage of NetLogo extension that will allow the
-easy decryption of previously encrypted data sets. This extension will provide
-for asymmetric and symmetric decryption such data sets. Each use-case will be
-described that the extension has been designed to address by way of a small
-example of usage. This will be followed by the usual discussion of issues
-raised by the utility and use of this plug-in.
+easy decryption of previously encrypted data sets. This extension will require
+the installation of GNU's Pretty Good Privacy suite of programs, or at the very
+list have the command `gnupg` in the execution path currently invoking the
+NetLogo model.  This will be invoked in the background in order  provide
+asymmetric and symmetric decryption for any data sets. Each of the possible
+use-cases will be described that the extension has been designed to address by
+way of a small example of usage. This will be followed by the usual discussion
+of issues raised by the utility and use of this plug-in.
+
+
 
 # The NetLogo Extension
 
@@ -115,7 +122,7 @@ their data in the first place. This rules out the usual practice of utilising
 an existing, programmatic libraries, created for specifically for the purposes
 of encryption/decryption. Such libraries are indeed proven, but usually lack
 the user-friendly encryption tools required to do the initial encryption. Such
-tools although usually trivial to create crucially, still have to be developed,
+tools although usually trivial to create, crucially, still have to be developed 
 and moreover, documented. Such requirements contain the possibility of the
 introduction of bugs. Additionally the use of such libraries requires the
 constant updating of the plug-in software, each time the library is updated -
@@ -154,7 +161,6 @@ primitives:
 + `gpg:cmd`
 + `gpg:home`
 + `gpg:open`
-+ `gpg:open-with-passphrase`
 + `gpg:read-line`
 + `gpg:at-end?`
 + `gpg:close`
@@ -180,7 +186,7 @@ extensions directory of the NetLogo installation. This is normally:
 + On 64-bit Windows with 32-bit NetLogo: 
   `C:\Program Files (x86)\NetLogo 6.0.4\app\extensions`
 
-+ On Linux, or other *nix: the app/extensions subdirectory of the NetLogo
++ On Linux, or other \*nix: the app/extensions subdirectory of the NetLogo
   directory extracted from the installation .tgz
 
 Or, alternatively it can be placed in a sub-directory with the same name as the
@@ -195,19 +201,21 @@ extensions keyword beginning the NetLogo model code.
 ## `gpg:cmd`
 
 This sets the path of the `gpg` command if the `gpg` command is not in `$PATH`
-for *nix system or `%PATH%` for Windows based systems. Its also allows the
+for \*nix system or `%PATH%` for Windows based systems. Its also allows the
 specification of additional parameters to `gpg`. This should not be needed. The
 only parameters that should require changing are the home directory containing
 the keyring. However, this can also be done using `gpg:home`. This multiple way
 of achieving the same end is due to OS sensitivity over paths.  `gpg:home`
 provides an operating system agnostic method of specifying the keyring
-directory. However this does provide flexibility to replace the `gpg` command,
-wrap it, or replace it with something else. This may appear to be a security
+directory. `gpg:cmd` also allows the GPG executable to be wrapped, or replaced
+with something else. This may appear to be a security
 weakness, and indeed it is, but the choice of calling the program externally to
 NetLogo implies that this can be done without `gpg:cmd`. That is, it is easy to
 replace the `gpg` binary with something nefarious. This also applies to any
 non-static library that NetLogo makes use of. So, although not air-tight
-security, this does offer "reasonable" security.
+security, this does offer "reasonable" security. The only way to obviate such a
+weakness would be to statically compile in such libraries and this has
+consequences for security and flexibility as elaborated earlier.
 
 Some examples of the invocation of this command might be
 
@@ -218,46 +226,275 @@ gpg:cmd "/opt/gpg/bin/gpg"
 or
 
 ```
-gpg:cmd "gpg --
+gpg:cmd "gpg --homedir ~/some-directory"
 ```
 
 Note, the state of execution string will persist, and not reset until the next
-invocation of `gpg:cmd`. The command can be cleared to default by using
+invocation of `gpg:cmd`. The command can be cleared to default by using either
 
-`gpg:cmd ""`
+`gpg:cmd ""` or `(gpg:cmd)`
+
 
 ##  `gpg:home`
-##  `gpg:open-with-passphrase`
+
+This sets the home directory relative to the directory in which the NetLogo model resides.
+If this command is not used then GPG assumes the that its key ring
+resides in the sub-directory `.gnupg` of the standard home directory for that
+system.
+
+Examples of the usage of this command might be 
+
+```
+gpg:home .keyrings
+```
+
+This would expect the keyrings to be found in a directory `.keyrings`
+immediately below the directory in which the NetLogo code for the model
+resides.
+
+Note, the home-directory  will persist, and not reset until the next invocation
+of `gpg:home`. The command can be cleared to default by using either
+
+`gpg:home ""` or `(gpg:home)`
+
+The home directory can also alternatively be set using: 
+
+```
+gpg:cmd "gpg --homedir ~/some-directory"
+```
+
 ##  `gpg:open`
+
+This attaches and decrypts a given cryptogram.
+
+If `cryptogram_path` is the filename of the cryptogram and `cryptogram_id` will
+be the variable holding the id of the attached and opened cryptogram, and in
+addition the cryptogram has not been encrypted symmetrically, nor has does the
+key that has encrypted it require a passphrase, then this command would be used
+in the following manner. 
+
+```
+let cryptogram_id  gpg:open cryptogram_path
+```
+
+If the cryptogram `cryptogram_path` has been symmetrically encoded, or the its
+decoding key requires a passphrase then this can be specificed in the following
+manner, where "some-passphrase" is the required phrase.
+
+```
+let cryptogram_id  (gpg:open 
+    cryptogram_path "some-passphrase")
+```
+
+
+This will exception if the `cryptogram_path` does not exist, cannot be opened,
+or requires a passphrase when none has been supplied..
+
 ##  `gpg:read-line`
+
+Reads a line of clear text. from a previously opened cryptogram. The file must
+have been successfully opened using `gpg:open`.
+
+If `clear-text` is a previously declared NetLogo variable and `cryptogram_id`
+is the variable holding the id of the attached and opened cryptogram, then this
+command would be used in the following manner.
+
+```
+set clear-text  gpg:read-line cryptogram_id
+```
+
+This will exception if the `cryptogram_id` does not represent a cryptogram that
+is attached and opened.
+
+
 ##  `gpg:at-end?`
+
+Tests whether there are additional lines of plain text available for
+`gpg:read-line` to obtain. The file must have been successfully opened using
+`gpg:open`.
+
+If `cryptogram_id` is the variable holding the id of the attached and opened
+cryptogram, then this command would be used in the following manner.
+
+```
+if gpg:at-end? cryptogram_id [
+    ...
+]
+```
+
+This will exception if the `cryptogram_id` does not represent a cryptogram that
+is attached and opened.
+
+
 ##  `gpg:close`
+
+
+Closes and detaches the cryptogram. The file must have been successfully opened
+using `gpg:open`.  This means the data is no longer sitting in memory
+encrypted.
+
+If `cryptogram_id` is the variable holding the id of the attached and opened
+cryptogram, then this command would be used in the following manner.
+
+```
+gpg:close cryptogram_id
+```
+
+This will exception if the `cryptogram_id` does not represent a cryptogram that
+is attached and opened.
+
 
 
 # Illustrations
 
 ## Symmetric encryption
 
+This is the easier kind of encryption to understand. A secret is encrypted with
+a key to produce a cryptogram. That key, and cryptogram are then passed to the
+person who wishes to decrypt it. This person then uses the key to decrypt the
+cryptogram in order to obtain the secret. Until the advent of asymmetric, this
+was most usual method of encryption usage. The weakness with this approach is
+that the key needs to be transported along with the cryptogram.  
+
+```
+  let file (gpg:open cryptogram passphrase)
+  while [ not (gpg:at-end? file) ] [
+    output-show gpg:read-line file
+  ]
+  gpg:close file
+```
+
 ## Asymmetric encryption
 
-This is the most powerful facility of GPG. Asymmetric encryption offers the
-ability for specific individuals to have unique keys allowing them and only them to
-decrypt the file. This is achieved by encrypting the file with the public key of the recepient, so only the private key of the receipient can then unencrypt the cryptogram. This makes this form of encryption enormously secure.
+This is the most powerful facility of GnuPG. Asymmetric encryption offers the
+ability for any individual to encrypt a message, but only specific individuals
+being able to decrypt the file, _without having passed any encryption keys_.
+This is achieved by encrypting the file with the public key of the recipient,
+so only the private key of the recipient can then unencrypt the cryptogram.
+This makes this form of encryption enormously secure, and hard to exploit,
+because the key is never exposed to other parties. This is the unique appeal of
+key asymmetry: the only people who can open the file must be in physical
+possession of the private key, and if a passphrase is used, then they must also
+know something as well.
 
-## Reading an assymetrically encoded CSV file
+Asymmetric key encryption tends to confuse people [@]. It may, however, be
+thought of in the following manner. Consider a chest which has two locks on it.
+The first lock is a deadlock and may only be locked permanently with a key,
+otherwise that lock is always open. If this lock is locked, then this triggers
+the latching of a second lock. The first key corresponds to the public key, the
+second to the private key. In this scenario, if a secret is locked in the box,
+by the public key, this causes the second lock to latch and lock. The box may
+only be opened if and only if we have both the public and private key. This is
+not quite how asymmetric encryption in GnuPG works, but is near enough to give
+a reasonable understanding of the principles and its implications. For instance
+using this box system I can pass a secret to a person who owns the private key,
+safe in the knowledge that once this box is locked only they can unlock it.
+GnuPG is effectively just a method of leaving many copies of such boxes and
+many copies of such locking, public keys just lying around, just waiting to be used.
+
+The code below presumes a cryptogram with no passphrase on the private key. So
+if we have some user, denoted `aUser`, and this user has a public key
+`aUser.pub`, an email associated with this public key of
+`aUser@anInstitution.ac.uk`,  a private key, `aUser.ppk` corresponding to the
+public key `aUser.pub` and the clear-text in `clear.txt` is available in the
+same directory contain the NetLogo model and code.
+
+Firstly the public key would need to be imported into the keyring of the person
+performing the encryption:
+
+```
+gpg --import aUser.pub
+```
+
+This user would then encrypt the clear text in `clear.txt` using the following
+command:
+
+```
+gpg --encrypt \
+  --output cryptogram.gpg \
+  --recipient aUser@anInstitution.ac.uk \
+  clear.txt
+```
+
+The cryptogram is now encoded in the file `cryptogram.gpg`, with the public
+key, `aUser.pub`.  To be able to decrypt the cryptogram, `cryptogram.gpg`, then
+the user who wishes to do the decryption must have the private key, `aUser.ppk`
+in their keyring. This may have happened in only two ways. Firstly `aUser.pub`
+the public key was generated by the command:
+
+```
+gpg --gen-key
+```
+
+This generates a private key into a person's keyring and moreover associates
+that private key with a particular email address.  To obtain the public key
+then the following must be run:
+
+```
+gpg --export  aUser@anInstitution.ac.uk \
+  > aUser.pub
+```
+
+This is the public key and may be distributed to anybody. There are no privacy
+implication on the distribution of this key.
+
+Or, alternatively they would have had to import the private key into the
+keyring, say something along the lines of
+
+```
+gpg --allow-secret-key-import aUser.ppk
+```
+
+Given all the above, if the file `cryptogram.pgp` is present
+in the same directory as the NetLogo code and model. Also given the
+preconditions above, then the code to decrypt and show the code would be the
+following:
+
+```
+  let file (gpg:open "cryptogram.gpg")
+  while [ not (gpg:at-end? file) ] [
+    output-show gpg:read-line file
+  ]
+  gpg:close file
+```
+
+This means that only a user in possession of `aUser.ppk` can decode the
+cryptogram `cryptogram.pgp`. Moreover if there is passphrase associated with
+`aUser.ppk` then this must also be supplied, further reducing the possibility
+of the cryptogram becoming compromised. The passphrase should really be
+supplied by an automatically clearing field provided in the interface. However
+we cannot enforce it, but only recommend this as the implementation.
+
+Even better is that multiple email addresses can be provided at the point of
+encryption. This means the recipients can be limited to a specific set of
+individuals if required.
+
+## Reading an asymmetrically encoded CSV file
+
+```
+  let file gpg:open "cryptogram.gpg"
+  while [ not (gpg:at-end? file) ] [
+    output-show (csv:from-row 
+        gpg:read-line file)
+  ]
+  gpg:close file
+```
 
 # Discussion and conclusions
 
-This does have the disadvantage of introducing dependencies hitherto not present for NetLogo
+Public key servers.
+
+This does have the disadvantage of introducing dependencies hitherto not
+present for NetLogo
 
 In conjunction with Infrastructure as a Service (IaaS), then it is becoming
 increasingly common to see NetLogo models.
 
 We have developed a plugin that uses the Gnu PGP software to allow various
-types of encryption on the data only. We could develop a plugin that
-obfuscates the code, but we believe that this not only violates the code of
-openness that surround the NetLogo community, but also possibly violates the GNU
-Public License version 2 under which NetLogo is distributed. Taking somebody's open
+types of encryption on the data only. We could develop a plugin that obfuscates
+the code, but we believe that this not only violates the code of openness that
+surround the NetLogo community, but also possibly violates the GNU Public
+License version 2 under which NetLogo is distributed. Taking somebody's open
 code and concealing it legally violates the license, as this is precisely the
 reason the license was created in the first place [@]. It also violates the
 principle of open science as people should be able to inspect models to see the
@@ -270,19 +507,24 @@ available that mirror the functionality of PGP [@]. However this has the
 limitation of precluding the rapid release cycle of encryption software once
 vulnerabilities have been discovered.
 
-Specifically designed for GNUPG - there might be other encryption packages out there.
+Specifically designed for GNUPG - there might be other encryption packages out
+there.
 
 This is still to complicated for non-technical users.
 
-This is susceptible to memory sniffing attacks. These can be mitigated by
-encrypting swap, but if the key is in the clear anywhere in memory, then there
-is always a chance that it can be obtained. This will always be a weakness of
-any encryption system that is computerised*
+This is susceptible to memory sniffing attacks, particularly memory freezing
+attacks (crashing the application or entire machine such as those found in
+privilege-raising attacks[@])). These can be mitigated by encrypting disk swap,
+but if the key is in the clear anywhere in memory, then there is always a
+chance that it can be obtained. This will always be a weakness of any
+encryption system that is computerised[^1].
 
-* _And why digital-rights management by way of encryption will always fail._
+[^1]: And this is  why digital-rights management by way of encryption will always fail. Ha, ha, ha.
 
 # Acknowledgements
+
 # Bibliography
+
 
 
 
