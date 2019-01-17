@@ -4,7 +4,7 @@ author:
     - Doug Salt
     - Gary Polhill
 abstract: "A description of a NetLogo plugin and the reasoning behind its design and implmentation. The plugin makes use of Gnu's Pretty Good Privacy software suite to encrypt arbitary data sources in Netlogo. This both secures the data to a reasonable degree and protects any sensitive data that might be in use for a publically available model."
-keywords: "NetLogo, PGP, GnuPGP, Privacy, Security"
+keywords: "NetLogo, PGP, GPGP, Privacy, Security"
 subtitle: "Securing NetLogo Data Sources"
 project: MDT
 ---
@@ -100,14 +100,12 @@ Having established the need for encryption, the remainder of this paper will
 describe the installation and usage of NetLogo extension that will allow the
 easy decryption of previously encrypted data sets. This extension will require
 the installation of GNU's Pretty Good Privacy suite of programs, or at the very
-list have the command `gnupg` in the execution path currently invoking the
+list have the command `gpg` in the execution path currently invoking the
 NetLogo model.  This will be invoked in the background in order  provide
 asymmetric and symmetric decryption for any data sets. Each of the possible
 use-cases will be described that the extension has been designed to address by
 way of a small example of usage. This will be followed by the usual discussion
 of issues raised by the utility and use of this plug-in.
-
-
 
 # The NetLogo Extension
 
@@ -144,7 +142,7 @@ increasing stability and formal correctness for the extension.
 The external tool chosen is GNU Privacy Guard, hereafter referred to as GPG.
 This is a well known suite of programs that at its heart uses OpenPGP standard
 as defined by RFC4880 (also known as PGP) [@]. Although designed primarily for
-the purposes of safe-guarding communications, GnuPG allows the encryption of
+the purposes of safe-guarding communications, GPG allows the encryption of
 data; it features a versatile key management system, along with access modules
 for all kinds of public key directories. GPG is a command line tool with
 features for easy integration with other applications. The software is mature
@@ -196,7 +194,16 @@ as `gpg` so if the model `example.nlogo` was placed in the directory
 `/data/models` the extension would have the path `/data/models/gpg/gpg.jar`.
 
 The extension is invoked in the NetLogo code by adding the keyword `gpg` to the
-extensions keyword beginning the NetLogo model code.
+extensions keyword beginning the NetLogo model code. For example in the code
+examples provided for the gpg implementation, the following appears at the top
+of the code section indicating that the `gpg` and `csv` extensions are to be
+used.
+
+```
+extensions [gpg csv]
+```
+
+A brief description of the available extension keywords now follows.
 
 ## `gpg:cmd`
 
@@ -274,7 +281,7 @@ key that has encrypted it require a passphrase, then this command would be used
 in the following manner. 
 
 ```
-let cryptogram_id  gpg:open cryptogram_path
+let cryptogram_id gpg:open cryptogram_path
 ```
 
 If the cryptogram `cryptogram_path` has been symmetrically encoded, or the its
@@ -300,7 +307,7 @@ is the variable holding the id of the attached and opened cryptogram, then this
 command would be used in the following manner.
 
 ```
-set clear-text  gpg:read-line cryptogram_id
+set clear-text gpg:read-line cryptogram_id
 ```
 
 This will exception if the `cryptogram_id` does not represent a cryptogram that
@@ -356,17 +363,43 @@ cryptogram in order to obtain the secret. Until the advent of asymmetric, this
 was most usual method of encryption usage. The weakness with this approach is
 that the key needs to be transported along with the cryptogram.  
 
+Say we have some clear text containing some sensitive data, and we wish to
+encrypt this a key, say the string, "some-string", then the procedure using GPG
+would be the following:
+
 ```
-  let file (gpg:open cryptogram passphrase)
+gpg --encrypt \
+  --passphrase "some-string" \
+  --output cryptogram.gpg \
+  clear.txt
+```
+
+The passphrase "some-password" and the cryptogram, `cryptogram.gpg` are now
+passed to the recipient who wishes to make use of the data in their model.
+Possessing both these components, then the code required in order to decrypt
+and make use of such data would be as follows:
+
+
+```
+  let file (gpg:open cryptogram 
+    "some-string")
   while [ not (gpg:at-end? file) ] [
     output-show gpg:read-line file
   ]
   gpg:close file
 ```
 
+This is not particular secure as the key is embedded in the code. This
+insecurity could be reduced by requiring the pass-phrase to supplied in an
+automatically clearing input field in the NetLogo interface.
+
+The primary advantage of this approach is its simplicity and it obvious
+semantics which make it easier to follow than the asymmetric key approach in
+the next section.
+
 ## Asymmetric encryption
 
-This is the most powerful facility of GnuPG. Asymmetric encryption offers the
+This is the most powerful facility of GPG. Asymmetric encryption offers the
 ability for any individual to encrypt a message, but only specific individuals
 being able to decrypt the file, _without having passed any encryption keys_.
 This is achieved by encrypting the file with the public key of the recipient,
@@ -385,19 +418,20 @@ the latching of a second lock. The first key corresponds to the public key, the
 second to the private key. In this scenario, if a secret is locked in the box,
 by the public key, this causes the second lock to latch and lock. The box may
 only be opened if and only if we have both the public and private key. This is
-not quite how asymmetric encryption in GnuPG works, but is near enough to give
+not quite how asymmetric encryption in GPG works, but is near enough to give
 a reasonable understanding of the principles and its implications. For instance
-using this box system I can pass a secret to a person who owns the private key,
-safe in the knowledge that once this box is locked only they can unlock it.
-GnuPG is effectively just a method of leaving many copies of such boxes and
-many copies of such locking, public keys just lying around, just waiting to be used.
+using this box system we can pass a secret to a person who owns the private
+key, safe in the knowledge that once this box is locked only they can unlock
+it.  GPG is effectively just a method of leaving many copies of such boxes and
+many copies of such locking, public keys just lying around, just waiting to be
+used.
 
 The code below presumes a cryptogram with no passphrase on the private key. So
 if we have some user, denoted `aUser`, and this user has a public key
 `aUser.pub`, an email associated with this public key of
 `aUser@anInstitution.ac.uk`,  a private key, `aUser.ppk` corresponding to the
 public key `aUser.pub` and the clear-text in `clear.txt` is available in the
-same directory contain the NetLogo model and code.
+same directory containing the NetLogo model and code.
 
 Firstly the public key would need to be imported into the keyring of the person
 performing the encryption:
@@ -465,11 +499,20 @@ of the cryptogram becoming compromised. The passphrase should really be
 supplied by an automatically clearing field provided in the interface. However
 we cannot enforce it, but only recommend this as the implementation.
 
-Even better is that multiple email addresses can be provided at the point of
-encryption. This means the recipients can be limited to a specific set of
-individuals if required.
+Even better is that multiple email addresses, corresponding to multiple public
+keys can be provided at the point of encryption. This means the recipients can
+be limited to a specific set of individuals if required, and only those
+individuals can decrypt the cryptogram.
 
 ## Reading an asymmetrically encoded CSV file
+
+With a simalar set-up as above; then if we have some user, denoted `aUser`, and
+this user has a public key `aUser.pub`, an email associated with this public
+key of `aUser@anInstitution.ac.uk`,  a private key, `aUser.ppk` corresponding
+to the public key `aUser.pub`. Also a clear-text comma separated variables
+file, in `clear.csv` has been enecrypted using `aUser.pub` to produce a file
+`cryptogram.gpg` in the directory that the NetLogo model and code resides. Then
+to decode the file we would use the following code.
 
 ```
   let file gpg:open "cryptogram.gpg"
@@ -480,15 +523,74 @@ individuals if required.
   gpg:close file
 ```
 
+This example is very similar to that of the previous section, and all it shows
+is that the extension can be used when coupled to other extensions available in
+NetLogo thus increasing its possible utility.
+
 # Discussion and conclusions
 
-Public key servers.
+The real goal here is to encourage the use of asymmetric encryption, for the
+purposes of securing potentially sensitive data. The use of such encryption
+allows the personalisation of data in an unprecedented manner. That is, secrets
+can be passed between sender and receiver based only on something publicly
+shared, something only the receiver has, and optionally knows (if there is a
+passphrase on their private key). What makes this method particular secure is
+no exchange of key information has to take place. With the ability to encrypt
+for multiple recipients using a single cryptogram containing data, then this
+effectively means that encrypted data can be personalised to the group of
+receivers only: each having their own particular private key. This restricts
+the use of the data to that group, and that group only (providing their private
+keys remain uncompromised).
 
-This does have the disadvantage of introducing dependencies hitherto not
-present for NetLogo
+This is an approach which has distinct advantages outside of this particular
+application, most notably for email. Consequently the infrastructure has been
+developed, and is in place to allow the publishing of public keys to the
+Internet, and their subsequent use in mostly email clients. Most notably there
+are a number of public key servers, where public keys may be retrieved on the
+basis of the supplied email address. However, the extra complexity to make use
+of this technology seems to have stalled its adoption.  Additionally many of
+the free messaging service providers, such as Google and Microsoft have no
+interest in processing data which they can no longer read the content of, so
+have no incentive to develop easy-to-use implementations of asymmetric key
+encryption. To use this infrastructure to allow decryption and encryption of
+data in NetLogo, then this does have the extra dependencies of creating a
+private key; storing it (reliably and in a recoverable manner) and publishing
+the public key on a public key server.  Public keys servers do have the problem
+of becoming cluttered with keys that are no-longer used, or many duplicate keys
+for the same email. It is probably best practice to make all keys time-limited
+for this reason. Such a facility is provided at the time of creation of the
+public key.  However setting up a private key only needs to be done once. It
+can be done repeatedly if the problem of duplicates keys can be obviated.
+Indeed time-limited keys might be used as standard operational procedure, which
+would effectively mean the data is deleted upon expiration of the private key. 
+
+Setting up such a keys ensures that the data is secured against everything
+except code modification and memory sniffing. This reduces the security
+requirement footprint to a level where it might be considered that reasonable
+precautions had been undertaken to secure such data, or certainly as far as
+local legislation might require.
+
+One of the central assumptions of this paper is that the user of the data,
+whether this be a group or individual should be more responsible for the
+security of the data they use. This is enforced by the use of asymmetric
+encryption, forcing them to be in charge of their private keys in order that
+only the sender and the receivers are able to view and use the data. However,
+as mentioned this introduces a degree of technical expertise and knowledge may
+be beyond the average user, so another compromise might be the use of
+organizational key infrastructure. This would remove the onus of securing,
+and/or recovering keys from the user, but would represent a further compromise
+in the security of the data, in that anybody with sufficient permissions within
+a given organization would have unfettered access to the data. It might be
+argued that this is also reasonable security, and certainly a level of security that
+many organizations already have. 
 
 In conjunction with Infrastructure as a Service (IaaS), then it is becoming
-increasingly common to see NetLogo models.
+increasingly common to see NetLogo models and use NetLogo models in the cloud.
+The problem with cloud infrastructure is that it is non-localised and
+duplicated for the sake of fault-tolerance. it is therefore impossible to
+perform timely deletion of data in cloud infrastructure, because not even the
+service providers themselves will know the location and the number of copies of
+a given set of infrastructure at any one time..
 
 We have developed a plugin that uses the Gnu PGP software to allow various
 types of encryption on the data only. We could develop a plugin that obfuscates
@@ -510,7 +612,7 @@ vulnerabilities have been discovered.
 Specifically designed for GNUPG - there might be other encryption packages out
 there.
 
-This is still to complicated for non-technical users.
+As mentioned this is still too complicated for non-technical users.
 
 This is susceptible to memory sniffing attacks, particularly memory freezing
 attacks (crashing the application or entire machine such as those found in
@@ -519,12 +621,11 @@ but if the key is in the clear anywhere in memory, then there is always a
 chance that it can be obtained. This will always be a weakness of any
 encryption system that is computerised[^1].
 
-[^1]: And this is  why digital-rights management by way of encryption will always fail. Ha, ha, ha.
+[^1]: And this is  why digital-rights management by way of encryption will
+always fail. Ha, ha, ha.
 
 # Acknowledgements
 
 # Bibliography
-
-
 
 
