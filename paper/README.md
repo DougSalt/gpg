@@ -16,3 +16,7 @@ The paper devlopment cycle is an iteration of
 1. <edit> paper.md
 2 make pdf
 3 <view the> paper.pdf (or use zathura which automatically updates on change)
+
+To use this successfully then you need `pandoc`, with the pandoc-crossref
+plugin, `make`, Libreoffice for for the images, and some kind of text editor.
+The markdown is exactly as that used in Rmarkdown..

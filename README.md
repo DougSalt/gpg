@@ -11,9 +11,9 @@ Essentially this project has three parts.
 3. The remainder is the  code and supporting files used to develop the plugin.
 
 The plugin is built with `sbt` - Scala Build Tool. This tool is invoked from
-the command line and typing `help` at the command line with, unsurprisingly
-show help topics. However using `sbt` essentially boils down to an iteration of
-the following:
+the command line and typing `help` at the command line which, unsurprisingly
+shows help topics. However using `sbt` essentially boils down to an iteration
+of the following:
 
 1. <edit the file elsewhere>
 2. `compile`
