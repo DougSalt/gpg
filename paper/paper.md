@@ -534,7 +534,7 @@ purposes of securing potentially sensitive data. The use of such encryption
 allows the personalisation of data in an unprecedented manner. That is, secrets
 can be passed between sender and receiver based only on something publicly
 shared, something only the receiver has, and optionally knows (if there is a
-passphrase on their private key). What makes this method particular secure is
+passphrase on their private key). What makes this method particularly secure is
 no exchange of key information has to take place. With the ability to encrypt
 for multiple recipients using a single cryptogram containing data, then this
 effectively means that encrypted data can be personalised to the group of
@@ -542,7 +542,7 @@ receivers only: each having their own particular private key. This restricts
 the use of the data to that group, and that group only (providing their private
 keys remain uncompromised).
 
-This is an approach which has distinct advantages outside of this particular
+Such encryption has distinct advantages outside of this particular
 application, most notably for email. Consequently the infrastructure has been
 developed, and is in place to allow the publishing of public keys to the
 Internet, and their subsequent use in mostly email clients. Most notably there
@@ -570,27 +570,31 @@ requirement footprint to a level where it might be considered that reasonable
 precautions had been undertaken to secure such data, or certainly as far as
 local legislation might require.
 
-One of the central assumptions of this paper is that the user of the data,
-whether this be a group or individual should be more responsible for the
-security of the data they use. This is enforced by the use of asymmetric
-encryption, forcing them to be in charge of their private keys in order that
-only the sender and the receivers are able to view and use the data. However,
-as mentioned this introduces a degree of technical expertise and knowledge may
-be beyond the average user, so another compromise might be the use of
-organizational key infrastructure. This would remove the onus of securing,
-and/or recovering keys from the user, but would represent a further compromise
-in the security of the data, in that anybody with sufficient permissions within
-a given organization would have unfettered access to the data. It might be
-argued that this is also reasonable security, and certainly a level of security that
-many organizations already have. 
+One of the central pressumptions of this paper is that the user of the data,
+whether this be a group or individuals, should be more responsible
+for the security of the data they use. This is enforced by the use of
+asymmetric encryption, forcing them to be in charge of their private keys in
+order that only the sender and the receivers are able to view and use the data.
+However, as mentioned this introduces a degree of technical expertise and
+knowledge may be beyond the average user, so another compromise might be the
+use of organizational key infrastructure. This would remove the onus of
+securing, and/or recovering keys from the user, but would represent a further
+compromise in the security of the data, in that anybody with sufficient
+permissions within a given organization would have unfettered access to the
+data. It might be argued that this is also reasonable security, and certainly a
+level of security that many organizations already adopt. 
 
 In conjunction with Infrastructure as a Service (IaaS), then it is becoming
 increasingly common to see NetLogo models and use NetLogo models in the cloud.
 The problem with cloud infrastructure is that it is non-localised and
-duplicated for the sake of fault-tolerance. it is therefore impossible to
+duplicated for the sake of fault-tolerance. It is therefore impossible to
 perform timely deletion of data in cloud infrastructure, because not even the
 service providers themselves will know the location and the number of copies of
-a given set of infrastructure at any one time..
+a given set of infrastructure at any one time. Key deletion is functionally and
+realistically equivalent to deleting the remote data. Encrypting data in such
+infrastructure, which may be vulnerable to bad actors via the service provider
+or the consumers of the infrastructure, should therefore standard practice to
+ensure that the data remains secure no matter what happens. 
 
 We have developed a plugin that uses the Gnu PGP software to allow various
 types of encryption on the data only. We could develop a plugin that obfuscates
@@ -607,19 +611,32 @@ This code has been tested on Linux, Windows 7, Windows 10, and OSX so far
 the code could be ported in entirety into NetLogo. There are java libraries
 available that mirror the functionality of PGP [@]. However this has the
 limitation of precluding the rapid release cycle of encryption software once
-vulnerabilities have been discovered.
+vulnerabilities have been discovered. The code, as it stands is specifically
+designed for GPG, and the arguments expected by GPG. It would not be difficult
+to write wrapper scripts for other encryption suites, and therefore reuse this
+code. This, of course is a security weakness and does provide an additional
+attack surface, whereby the code could be replaced by compromised versions of
+the encryption suite, but as explained earlier, this provides a "reasonable"
+level of security.
 
-Specifically designed for GNUPG - there might be other encryption packages out
-there.
-
-As mentioned this is still too complicated for non-technical users.
-
-This is susceptible to memory sniffing attacks, particularly memory freezing
-attacks (crashing the application or entire machine such as those found in
-privilege-raising attacks[@])). These can be mitigated by encrypting disk swap,
-but if the key is in the clear anywhere in memory, then there is always a
-chance that it can be obtained. This will always be a weakness of any
+This package is susceptible to memory sniffing attacks, particularly memory
+freezing attacks (crashing the application or entire machine such as those
+found in privilege-raising attacks[@])). These can be mitigated by encrypting
+disk swap, but if the key is in the clear anywhere in memory, then there is
+always a chance that it can be obtained. This will always be a weakness of any
 encryption system that is computerised[^1].
+
+As mentioned this is still too complicated for non-technical users. However
+those users that deal with sensitive information have a duty to protect that
+data. If behooves them to understand the implications of not encrypting data,
+or making the effort to understand the basics of such encryption in
+order to use it safely and successfully.
+
+In conclusion, we have developed a portable encryption solution for NetLogo
+that can be tailored to the various security requirements of either
+institutions or individuals. This has been done with the minimum coding
+required in order to reduce an possibility of mistake, and using pre-existing
+standard software that can utilise existing encryption infrastructure.
 
 [^1]: And this is  why digital-rights management by way of encryption will
 always fail. Ha, ha, ha.

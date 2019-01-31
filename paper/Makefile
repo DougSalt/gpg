@@ -12,25 +12,18 @@ endif
 
 all: pdf
 
-#img/ontology-of-variables.png: img/ontology-of-variables.dot
-#	dot \
-#		-T png \
-#		-o img/ontology-of-variables.png \
-#		img/ontology-of-variables.dot
-#
+# There is a sodding bug in LibreOffice batch processing. I would do the
+# following line manually because I have been unable to get this working
+# automatically (it misses out the captions).
 
-# This doesn't work very well if you do it automatically - I have not managed
-# to work out what parameter is screwing up. If you do it this way, then you
-# loose the text.
+img/flow.png: img/flow.odg
+	soffice \
+		--headless \
+		--convert-to png \
+	    --outdir img \
+	    img/flow.odg
 
-#img/example.png: img/example.odg
-#	soffice \
-#		--headless \
-#		--convert-to png \
-#	    --outdir img \
-#	    img/example.odg
-
-pdf: paper.md
+pdf: paper.md img/flow.png
 	pandoc \
 		--from markdown $(WINDOWS) \
 		--to latex \
@@ -41,7 +34,7 @@ pdf: paper.md
 		--variable classoption="twocolumn" \
 		"./paper.md"
 
-html: paper.md 
+html: paper.md img/flow.png
 	pandoc \
 		--standalone \
 		--from markdown  $(WINDOWS)\
@@ -54,7 +47,7 @@ html: paper.md
 		--output "paper.html" \
 		"./paper.md"
 
-word: paper.md 
+word: paper.md img.png
 	pandoc \
 		--standalone \
 		--from markdown  $(WINDOWS)\
@@ -67,10 +60,12 @@ word: paper.md
 		--output "paper.docx" \
 		"./paper.md"
 clean:
-	rm -rf paper.pdf \
+	-rm -rf \
+		img/flow.png \
+		paper.pdf \
 		paper.html
 		tex2pdf.* \
-		*bib.bak
+		*bib.bak 2>/dev/null
 
 help:
 	@echo pdf - makes the pdf
