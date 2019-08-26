@@ -97,7 +97,7 @@ BUTTON
 90
 369
 124
-Symmetric decryption - no passphrase - fails
+symmetric decryption - no passphrase - fails
 symmetric_decryption_no_passphrase\n; This should always fail
 NIL
 1
@@ -132,7 +132,7 @@ BUTTON
 129
 368
 162
-Symmetric decryption with password - works
+symmetric decryption with password - works
 symmetric_decryption_with_passphrase\n; this should work with\n; + the file: symmetric.gpg\n; + the password: aPassword
 NIL
 1
@@ -147,9 +147,9 @@ NIL
 BUTTON
 20
 174
-267
+336
 207
-PPK with no passphrase - fails
+asymmetrically encrypted with no passphrase - fails
 ppk_no_passphrase_fails\n; Always fails
 NIL
 1
@@ -181,9 +181,9 @@ NIL
 BUTTON
 21
 244
-257
+347
 277
-PPK no passphrase - works
+asymmetrically encrypted with no passphrase - works
 ppk_no_passphrase_works\n; This should work on:\n; + file:  ppk.gpg\n; + homedir: netlogo1
 NIL
 1
@@ -203,7 +203,7 @@ CHOOSER
 cryptogram
 cryptogram
 "symmetric.gpg" "ppk.gpg" "csv.gpg"
-1
+2
 
 TEXTBOX
 381
@@ -218,9 +218,9 @@ Symmetric decryption with no password - this should always fail.\nSymmetric decr
 BUTTON
 21
 209
-257
+330
 242
-PPK with passphrase - works
+asymmetrically encrypted with passphrase - works
 ppk_with_passphrase_works
 NIL
 1
@@ -233,20 +233,20 @@ NIL
 1
 
 TEXTBOX
-279
-184
-545
-244
+342
+174
+608
+234
 Both these use the keyring in \"netlogo1\"  subdirectory Works on the file ppk.gpg and have the passphrase \"TopSecret\"
 10
 0.0
 1
 
 TEXTBOX
-261
-246
-527
-285
+356
+248
+622
+287
 Has the keyring in \"netlogo2\" subdirectory, work on the file ppk.gpg  - this keyring has no passphrase.
 10
 0.0
@@ -265,7 +265,7 @@ CLEAR TEXT
 INPUTBOX
 427
 10
-700
+794
 70
 homedir
 /home/ds42723/git/gpg/examples/netlogo2
@@ -895,7 +895,7 @@ false
 Polygon -7500403 true true 270 75 225 30 30 225 75 270
 Polygon -7500403 true true 30 75 75 30 270 225 225 270
 @#$#@#$#@
-NetLogo 6.0.4
+NetLogo 6.1.0
 @#$#@#$#@
 @#$#@#$#@
 @#$#@#$#@
