@@ -143,7 +143,7 @@ class ClearText (var cryptogram: File) {
 
   def open(): Unit = {
     var gpg = GPGConfiguration.commandLine 
-    gpg += " --batch --yes --decrypt"
+    gpg += " --batch --yes --decrypt --pinentry-mode loopback"
     // One of the differences between Linux and Windows. The character " is not absorbed in Linux
     if (passphrase != None ) {
       gpg += " --passphrase " + passphrase.get

@@ -30,3 +30,10 @@ versions of these to run in either a Windows or Linux environment.
 
 The build file definition `build.sbt` and the command files used are all in
 this current directory. 
+
+# Upgrading.
+
+1. Change the `manifest.txt` file and update the NetLogo versions
+2. Copy the new Netlogo jar into lib and delete the old ones.
+3. 
+4. Launch sbt and compile,build, release and run netlogo

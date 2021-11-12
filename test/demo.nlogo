@@ -203,7 +203,7 @@ CHOOSER
 cryptogram
 cryptogram
 "symmetric.gpg" "ppk.gpg" "csv.gpg"
-2
+1
 
 TEXTBOX
 381
@@ -243,11 +243,11 @@ Both these use the keyring in \"netlogo1\"  subdirectory Works on the file ppk.g
 1
 
 TEXTBOX
-356
-248
-622
-287
-Has the keyring in \"netlogo2\" subdirectory, work on the file ppk.gpg  - this keyring has no passphrase.
+353
+241
+619
+283
+Has the keyring in \"netlogo2\" subdirectory, and will work on the file \"ppk.gpg\" and \"csv.gpg\"\nThis keyring has no passphrase.
 10
 0.0
 1
@@ -268,7 +268,7 @@ INPUTBOX
 794
 70
 homedir
-/home/ds42723/git/gpg/examples/netlogo2
+/home/ds42723/git/gpg/test/netlogo2
 1
 0
 String
@@ -280,7 +280,7 @@ SWITCH
 43
 set-home-dir
 set-home-dir
-0
+1
 1
 -1000
 
@@ -895,7 +895,7 @@ false
 Polygon -7500403 true true 270 75 225 30 30 225 75 270
 Polygon -7500403 true true 30 75 75 30 270 225 225 270
 @#$#@#$#@
-NetLogo 6.1.0
+NetLogo 6.2.0
 @#$#@#$#@
 @#$#@#$#@
 @#$#@#$#@
