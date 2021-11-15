@@ -20,17 +20,8 @@ to symmetric_decryption_with_passphrase
   gpg:close file
 end
 
-to ppk_no_passphrase_fails
-  gpg:home "netlogo2"
-  let file gpg:open cryptogram
-  while [ not (gpg:at-end? file) ] [
-    output-show gpg:read-line file
-  ]
-  gpg:close file
-end
-
-to ppk_no_passphrase_works
-  gpg:home "netlogo1"
+to asymmetrically_decrypt_no_passphrase
+  gpg:home homedir
   let file gpg:open cryptogram
   while [ not (gpg:at-end? file) ] [
     ifelse CSV [
@@ -42,8 +33,8 @@ to ppk_no_passphrase_works
   gpg:close file
 end
 
-to ppk_with_passphrase_works
-  set-environment "netlogo2"
+to asymmetrically_decrypt_with_passphrase
+  gpg:home homedir
   let file (gpg:open cryptogram passphrase)
   while [ not (gpg:at-end? file) ] [
     ifelse CSV [
@@ -54,22 +45,12 @@ to ppk_with_passphrase_works
   ]
   gpg:close file
 end
-
-to set-environment [some-home-dir]
-  ifelse set-home-dir [
-    gpg:cmd (word "gpg --homedir " homedir)
-    (gpg:home)
-  ] [
-    gpg:home some-home-dir
-    (gpg:cmd)
-  ]
-end
 @#$#@#$#@
 GRAPHICS-WINDOW
-742
-217
-775
-251
+783
+273
+816
+307
 -1
 -1
 25.0
@@ -94,11 +75,11 @@ ticks
 
 BUTTON
 19
-90
-369
-124
-symmetric decryption - no passphrase - fails
-symmetric_decryption_no_passphrase\n; This should always fail
+91
+296
+125
+Symmetrically decrypt (no passphrase)
+Symmetric_decryption_no_passphrase\n; This should always fail
 NIL
 1
 T
@@ -110,12 +91,12 @@ NIL
 1
 
 INPUTBOX
-163
+168
 10
-273
+343
 70
 passphrase
-TopSecret
+NIL
 1
 0
 String
@@ -129,11 +110,11 @@ OUTPUT
 
 BUTTON
 20
-129
-368
-162
-symmetric decryption with password - works
-symmetric_decryption_with_passphrase\n; this should work with\n; + the file: symmetric.gpg\n; + the password: aPassword
+125
+296
+158
+Symmetrally decrypt (with passphrase)
+symmetric_decryption_with_passphrase\n
 NIL
 1
 T
@@ -145,12 +126,12 @@ NIL
 1
 
 BUTTON
-20
-174
-336
-207
-asymmetrically encrypted with no passphrase - fails
-ppk_no_passphrase_fails\n; Always fails
+19
+189
+296
+222
+Asymmetrically decrypt (no passphrase)
+asymmetrically_decrypt_no_passphrase
 NIL
 1
 T
@@ -178,50 +159,33 @@ NIL
 NIL
 1
 
-BUTTON
-21
-244
-347
-277
-asymmetrically encrypted with no passphrase - works
-ppk_no_passphrase_works\n; This should work on:\n; + file:  ppk.gpg\n; + homedir: netlogo1
-NIL
-1
-T
-OBSERVER
-NIL
-NIL
-NIL
-NIL
-1
-
 CHOOSER
-14
+19
 10
-152
+157
 55
 cryptogram
 cryptogram
 "symmetric.gpg" "ppk.gpg" "csv.gpg"
-1
+0
 
 TEXTBOX
-381
+301
 91
-603
-188
+808
+151
 Symmetric decryption with no password - this should always fail.\nSymmetric decryption will work with the password \"aPassword\"  and the cryptogram \"symmetric.gpg\".
 11
 0.0
 1
 
 BUTTON
-21
-209
-330
-242
-asymmetrically encrypted with passphrase - works
-ppk_with_passphrase_works
+19
+221
+296
+254
+Asymmetrically decrypt (with passphrase)
+asymmetrically_decrypt_with_passphrase
 NIL
 1
 T
@@ -233,21 +197,11 @@ NIL
 1
 
 TEXTBOX
-342
-174
-608
-234
-Both these use the keyring in \"netlogo1\"  subdirectory Works on the file ppk.gpg and have the passphrase \"TopSecret\"
-10
-0.0
-1
-
-TEXTBOX
-353
-241
-619
-283
-Has the keyring in \"netlogo2\" subdirectory, and will work on the file \"ppk.gpg\" and \"csv.gpg\"\nThis keyring has no passphrase.
+301
+186
+819
+280
+The keyring in \"netlogo1\" subdirectory will work on \"ppk.gpg\" and has the passphrase \"TopSecret\".\n\nThe keyring in \"netlogo2\" subdirectory will work on the file \"ppk.gpg\" and \"csv.gpg\". This keyring has no passphrase. So this will work with or without a passphrase.
 10
 0.0
 1
@@ -263,74 +217,39 @@ CLEAR TEXT
 1
 
 INPUTBOX
-427
+344
 10
-794
+711
 70
 homedir
-/home/ds42723/git/gpg/test/netlogo2
+/home/doug/git/gpg/test/netlogo1
 1
 0
 String
 
 SWITCH
-276
-10
-424
-43
-set-home-dir
-set-home-dir
-1
-1
--1000
-
-SWITCH
-276
-44
-379
-77
+18
+56
+121
+89
 CSV
 CSV
-1
+0
 1
 -1000
 
 @#$#@#$#@
 ## WHAT IS IT?
 
-A demonstration of a NetLogo plugin and  its design and implmentation. The plugin makes use of Gnu's Pretty Good Privacy software suite to encrypt arbitary data sources in Netlogo. This both secures the data to a reasonable degree and protects any sensitive data that might be in use for a publically available model.
+A gpgstration of a NetLogo plugin and  its design and implmentation. The plugin makes use of Gnu's Pretty Good Privacy software suite to encrypt arbitary data sources in Netlogo. This both secures the data to a reasonable degree and protects any sensitive data that might be in use for a publically available model.
 
 ## HOW IT WORKS
 
 This uses Gnu's Pretty Good Privacy, and in particular the `gpg` command to decrypt encrypted data. The command `gpg` must be in the command path of the NetLogo user. This takes cryptograms encoded using `gpg` decodes them in-situ, whilst the NetLogo code is running. The decoding is lost upon closure of the NetLogo model, or explicity with the code using the corresponding command.
 
-This plugin can make use of symmetric or asymmetric key encryption.
-The latter is the most powerful facility of `gpg`. Asymmetric encryption offers the
-ability for any individual to encrypt a message, but only specific individuals
-being able to decrypt the file, _without having passed any encryption keys_.
-This is achieved by encrypting the file with the public key of the recipient,
-so only the private key of the recipient can then unencrypt the cryptogram.
-This makes this form of encryption enormously secure, and hard to exploit,
-because the key is never exposed to other parties. This is the unique appeal of
-key asymmetry: the only people who can open the file must be in physical
-possession of the private key, and if a passphrase is used, then they must also
-know something as well.
+This plugin can make use of symmetric or asymmetric key encryption. The latter is the most powerful facility of `gpg`. Asymmetric encryption offers the ability for any individual to encrypt a message, but only specific individuals being able to decrypt the file, _without having passed any encryption keys_. This is achieved by encrypting the file with the public key of the recipient, so only the private key of the recipient can then unencrypt the cryptogram. This makes this form of encryption enormously secure, and hard to exploit, because the key is never exposed to other parties. This is the unique appeal of key asymmetry: the only people who can open the file must be in physical possession of the private key, and if a passphrase is used, then they must also know something as well.
 
-Asymmetric key encryption tends to confuse people [@]. It may, however, be
-thought of in the following manner. Consider a chest which has two locks on it.
-The first lock is a deadlock and may only be locked permanently with a key,
-otherwise that lock is always open. If this lock is locked, then this triggers
-the latching of a second lock. The first key corresponds to the public key, the
-second to the private key. In this scenario, if a secret is locked in the box,
-by the public key, this causes the second lock to latch and lock. The box may
-only be opened if and only if we have both the public and private key. This is
-not quite how asymmetric encryption in `gpg` works, but is near enough to give
-a reasonable understanding of the principles and its implications. For instance
-using this box system we can pass a secret to a person who owns the private
-key, safe in the knowledge that once this box is locked only they can unlock
-it.  `gpg` is effectively just a method of leaving many copies of such boxes and
-many copies of such locking, public keys just lying around, just waiting to be
-used.
+Asymmetric key encryption tends to confuse people [@]. It may, however, be thought of in the following manner. Consider a chest which has two locks on it. The first lock is a deadlock and may only be locked permanently with a key, otherwise that lock is always open. If this lock is locked, then this triggers the latching of a second lock. The first key corresponds to the public key, the second to the private key. In this scenario, if a secret is locked in the box, by the public key, this causes the second lock to latch and lock. The box may only be opened if and only if we have both the public and private key. This is not quite how asymmetric encryption in `gpg` works, but is near enough to give a reasonable understanding of the principles and its implications. For instance using this box system we can pass a secret to a person who owns the private key, safe in the knowledge that once this box is locked only they can unlock it.  `gpg` is effectively just a method of leaving many copies of such boxes and many copies of such locking, public keys just lying around, just waiting to be used.
 
 
 ## HOW TO USE IT
@@ -351,22 +270,7 @@ A note on terminology: a keyring is a directory in which private and public keys
 
 ### `gpg:cmd`
 
-This sets the path of the `gpg` command if the `gpg` command is not in `$PATH`
-for \*nix system or `%PATH%` for Windows based systems. Its also allows the
-specification of additional parameters to `gpg`. This should not be needed. The
-only parameters that should require changing are the home directory containing
-the keyring. However, this can also be done using `gpg:home`. This multiple way
-of achieving the same end is due to OS sensitivity over paths.  `gpg:home`
-provides an operating system agnostic method of specifying the keyring
-directory. `gpg:cmd` also allows the `gpg` executable to be wrapped, or replaced
-with something else. This may appear to be a security
-weakness, and indeed it is, but the choice of calling the program externally to
-NetLogo implies that this can be done without `gpg:cmd`. That is, it is easy to
-replace the `gpg` binary with something nefarious. This also applies to any
-non-static library that NetLogo makes use of. So, although not air-tight
-security, this does offer "reasonable" security. The only way to obviate such a
-weakness would be to statically compile in such libraries and this has
-consequences for security and flexibility as elaborated earlier.
+This sets the path of the `gpg` command if the `gpg` command is not in `$PATH` for \*nix system or `%PATH%` for Windows based systems. Its also allows the specification of additional parameters to `gpg`. This should not be needed. The only parameters that should require changing are the home directory containing the keyring. However, this can also be done using `gpg:home`. This multiple way of achieving the same end is due to OS sensitivity over paths.  `gpg:home` provides an operating system agnostic method of specifying the keyring directory. `gpg:cmd` also allows the `gpg` executable to be wrapped, or replaced with something else. This may appear to be a security weakness, and indeed it is, but the choice of calling the program externally to NetLogo implies that this can be done without `gpg:cmd`. That is, it is easy to replace the `gpg` binary with something nefarious. This also applies to any non-static library that NetLogo makes use of. So, although not air-tight security, this does offer "reasonable" security. The only way to obviate such a weakness would be to statically compile in such libraries and this has consequences for security and flexibility as elaborated earlier.
 
 Some examples of the invocation of this command might be
 
@@ -380,8 +284,7 @@ or
 gpg:cmd "gpg --homedir ~/some-directory"
 ```
 
-Note, the state of execution string will persist, and not reset until the next
-invocation of `gpg:cmd`. The command can be cleared to default by using either
+Note, the state of execution string will persist, and not reset until the next invocation of `gpg:cmd`. The command can be cleared to default by using either
 
 `gpg:cmd ""` or `(gpg:cmd)`
 
@@ -389,9 +292,8 @@ invocation of `gpg:cmd`. The command can be cleared to default by using either
 ###  `gpg:home`
 
 This sets the home directory relative to the directory in which the NetLogo model resides.
-If this command is not used then `gpg` assumes the that its key ring
-resides in the sub-directory `.gnupg` of the standard home directory for that
-system.
+
+If this command is not used then `gpg` assumes the that its key ring resides in the sub-directory `.gnupg` of the standard home directory for that system.
 
 Examples of the usage of this command might be 
 
@@ -399,9 +301,7 @@ Examples of the usage of this command might be
 gpg:home .keyrings
 ```
 
-This would expect the keyrings to be found in a directory `.keyrings`
-immediately below the directory in which the NetLogo code for the model
-resides.
+This would expect the keyrings to be found in a directory `.keyrings` immediately below the directory in which the NetLogo code for the model resides.
 
 Note, the home-directory  will persist, and not reset until the next invocation
 of `gpg:home`. The command can be cleared to default by using either
@@ -494,54 +394,37 @@ gpg:close cryptogram_id
 This will exception if the `cryptogram_id` does not represent a cryptogram that
 is attached and opened.
 
+## THINGS TO NOTICE
+
+In the demo code,there are 11 widgests.
+
+These are 4 decryption buttons
+An input field for the home directory. For this to work with the data generated below, then this input field must contain either:
+
++ `netlogo1`, or
++ `netlogo2`.
+
+The keyring in `netlogo` has the passphrase 'TopSecret'. Notice if you use the correct
+passphrase to decrypt something then gnupg will retain the catchphrase for `default-cache-ttl` (see below). This is normally half an hour.
+
+
+## THINGS TO TRY
+
+The directories in the directory of the model:
+
++ `netlogo1`;
++ `netlogo2`, and
++ `netlogo3`.
+
+may be deleted and recreated with differing source data as an exercise for the reader to make sure they truly understand the concepts involved in symmetric and asymmetric encryption.
+
 ### The keys used in this demo
 
-The cryptogram and keyrings used in this demo are set up as the follows. In the directory in which demo.nlogo resides, then the two keyrings used in this code were generated using the following twice:
+The following two files in this directory are the demonstration NetLogo and gpg
+contains the jar for the plugin.
 
-```
-gpg --homedir netlogo1 --gen-key
-```
-
-To generate the first two keys with emails <netlogo1@netlogo.com> and <netlogo2@netlogo.com>
-
-```
-gpg --homedir netlogo2 --gen-key
-```
-
-to generate the 3rd with the following details.
-
-```
-| User           | Email                  | Passphrase      |  Homedir | 
-|                |                        | (none if blank) |          |
-|----------------|------------------------|----------------------------|
-| NetLogo User 1 | <netlogo1@netlogo.com> | Secret          | netlogo1 |
-| NetLogo User 2 | <netlogo2@netlogo.com> |                 | netlogo1 |
-| NetLogo User 2 | <netlogo3@netlogo.com> | TopSecret       | netlogo2 |
-```
-
-This will generate the following files in netlogo1 and netlogo2:
-
-+ pubring.gpg
-+ secring.gpg
-+ trustdb.gpg
-
-We then moved the public keys around
-```
-gpg --homedir netlogo1 --export netlogo1@netlogo.com > pub1
-gpg --homedir netlogo2 --import pub1
-
-gpg --homedir netlogo1 --export netlogo2@netlogo.com > pub2
-gpg --homedir netlogo2 --import pub2
-
-gpg --homedir netlogo2 --export netlogo1@netlogo.com > pub3
-gpg --homedir netlogo1 --import pub3
-```
-
-The following two files in this directory are the demonstation netlogo and gpg
-cotnains the jar for the plugin.
-
-demo.nlogo
-gpg
+`gpg.nlogo`
+`gpg`
 
 The following is some random text encrypted with a symmetric key. The key being1
 the word "aPassword".
@@ -552,9 +435,77 @@ This was encrypted using:
 
 `gpg --symmetric --passphrase aPassword -o symmetric.gpg some_clear_text.txt`
 
-The following is some random text encrypted for recipients:
+The asymmetrically encrypted cryptograms and keyrings used in this demo are set up as the follows. These encrypt the files
 
-ppk.ppg
++ `ppk.txt`, and
++ `csv.txt`.
+
+The first contains some recognizably coherent text the second contains a file in CSV format. The latter is included to show how `gpg` may be used in conjunction the 'csv` 
+extension and this is demonstrated if the csv switch in the interface is to to true.
+In the directory in which `gpg.nlogo` resides, then the keyrings used in this code are generated in the folowing manner.
+
+In the directory wheret `gpg.nlogo` resides. To generate the first key with email <netlogo1@netlogo.com>.
+
+```
+mkdir netlogo1
+gpg --homedir netlogo1 --gen-key
+```
+
+We add the passphrase 'TopSecret' when generating this key
+
+To generate the second key with email <netlogo2@netlogo.com>.
+
+```
+mkdir netlogo2
+gpg --homedir netlogo2 --gen-key
+```
+
+We use a blank passphrase on this user.
+
+
+We now need a third user to actually do the encryption (we use no passphrase on this user)
+
+```
+mkdir netlogo3
+gpg -homedir netlogo3 --gen-key
+```
+
+We use a blank passphrase on this user.
+
+We now need to export and import the public keys for use when encrypting into this new user
+
+```
+gpg --homedir netlogo1 --export netlogo1@netlogo.com > netlogo3/netlogo1@netlogo.com.pub
+gpg --homedir netlogo3 --import netlogo3/netlogo1@netlogo.com.pub
+gpg --homedir netlogo2 --export netlogo2@netlogo.com > netlogo3/netlogo2@netlogo.com.pub
+gpg --homedir netlogo3 --import netlogo3/netlogo2@netlogo.com.pub
+```
+
+Now to encrypt the files using netlogo3 user 
+
+```
+gpg --homedir netlogo3 --encrypt \
+	--output ppk.gpg \
+	--recipient netlogo2@netlogo.com \
+	--recipient netlog1@netlogo.com ppk.txt
+
+gpg --homedir netlogo3 --encrypt \
+	--output csv.gpg \
+	--recipient netlogo2@netlogo.com \
+	--recipient netlog1@netlogo.com csv.txt
+```
+
+This will give the following public keys encrypted on the key ring
+of netlogo3 in the directory `netlogo3`.
+
+```
+| User           | Email                  |  Homedir | 
+|----------------|------------------------|----------|
+| NetLogo User 1 | <netlogo1@netlogo.com> | netlogo1 |
+| NetLogo User 2 | <netlog23@netlogo.com> | netlogo2 |
+```
+
+This will generate several files in `netlogo1`, `netlogo2` and `netlogo3`:
 
 for the following keys.
 
@@ -566,29 +517,43 @@ for the following keys.
 | NetLogo User 3 | <netlogo3@netlogo.com> |
 ```
 
-## THINGS TO NOTICE
-
-(suggested things for the user to notice while running the model)
-
-## THINGS TO TRY
-
-(suggested things for the user to try to do (move sliders, switches, etc.) with the model)
-
 ## EXTENDING THE MODEL
 
-(suggested things to add or change in the Code tab to make the model more complicated, detailed, accurate, etc.)
+`gnupg` could be replaced by any other encryption suite. The process of decryption is 
+effectively the same. This facility is explictly provide for in the command `gpp:cmd`.
 
 ## NETLOGO FEATURES
 
-(interesting or unusual features of NetLogo that the model uses, particularly in the Code tab; or where workarounds were needed for missing features)
+Not strictly a NetLogo feature, but it should be noted that `gnupgp` caches credentials.
+What this in effect means that if you have already entered a passphrase to unlock a private key for asymmetric encryption, then `gnuppg` will retain that passphrase for the number of seconds defined for caching. This means that the passprhase will effective be useless during this period of cache, if the corrrect passphrase has been used in the `ttl period`. This can be confusing. 
+
+The time this is set for is present in
+
+`default-cache-ttl`
+
+This may be access using the following command:
+
+`
+gpg-conf --list-options gpg-agent | grep 'default-cache-ttl'
+`
+
+and set editing:
+
+`~/.gnupg/gpg-agent.conf`
+
+and adding the line:
+
+`max-cache-ttl 3600`
+
+If it is for an hour.
 
 ## RELATED MODELS
 
-(models in the NetLogo Models Library and elsewhere which are of related interest)
+Hopefully some models will eventually use this to proect data. It should be noted that once the keys are lost, or destroyed
 
 ## CREDITS AND REFERENCES
 
-(a reference to the model's URL on the web if it has one, as well as any other necessary credits, citations, and links)
+doug.salt@hutton.ac.uk
 @#$#@#$#@
 default
 true
