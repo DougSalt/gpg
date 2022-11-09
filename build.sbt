@@ -18,6 +18,8 @@ release:= {
     println("OS = " + os)
     if ( os == "Linux" ) {
       "./release.sh" !
+    } else if ( os == "Darwin" ) {
+      "./release.sh" !
     } else {
       "./release.bat" !
     }
@@ -28,6 +30,8 @@ netlogo := {
     val os = {"uname" !!}.stripLineEnd
     println("OS = " + os)
     if ( os == "Linux" ) {
+      "./run.sh" !
+    } else if ( os == "Darwin" ) {
       "./run.sh" !
     } else {
       "./run.bat" !
