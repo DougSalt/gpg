@@ -1,3 +1,22 @@
+# WARNING
+
+As per usual Java is borked and broken. If you use above version 17 then this
+will not work, and I have not had time to fix it yet. They have removed
+functionality and it looks like SBT has not caught up yet. I hate this. It is
+utterly 100% predictable, but 'tis life. At the moment you can run this on
+version 17, but who knows for how long before something else in the developer
+chain is broken.
+
+To fix on OSX
+
+```
+brew tap homebrew/cask-versions
+brew install --cask temurin17
+export JAVA_HOME=$(/usr/libexec/java_home -v 17)
+```
+
+Then run the remainder of this document.
+
 # PURPOSE
 
 This is a small project to implement a pretty good privacy plugin for Netlogo.
@@ -26,12 +45,7 @@ See the [build instructions](BUILD.md).
 
 # UPGRADING
 
-This is for upgrading the package when NetLogo does.
-
-1. Change the `manifest.txt` file and update the NetLogo versions
-2. Copy the new Netlogo jar into lib and delete the old ones.
-3. 
-4. Launch sbt and compile,build, release and run netlogo
+See the [upgrading instructions](UPGRADING.md).
 
 # INSTRUCTIONS
 
