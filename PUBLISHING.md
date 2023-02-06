@@ -30,8 +30,8 @@ by using the command
 
 ```
 cd ~/git/gpg/test/gpg
-zip gpg-1.0.0.jar gpg.jar
-cp gpg.jar ~/git/NetLogo-Libraries/extensions
+zip gpg-1.0.0.zip gpg.jar
+cp gpg-1.0.0.zip ~/git/NetLogo-Libraries/extensions
 ```
 
 where `1.0.0` is the version number
@@ -42,7 +42,7 @@ Add the following to the `NetLogo-Libraries/libraries.conf`
 
 
 {
-    name: "Case based reasoning"
+    name: "Gnu Pretty Good Privacy"
     codeName: "gpg"
     shortDescription: "Gnu Pretty Good Privacy (GnuPG) Extension"
     longDescription: """Implements a NetLogo extension that utilises GnuPG privacy suite to decrypt data that is encoded symmetrically or asymmetrically.  This will allow for the secure storing of sensitive data in public repositories as these keys can be tailored to specific individuals or groups of individuals.  Additionally this allows the absolute destruction of publically available data providing the it can be proven that the keys for such data no longer exist.
