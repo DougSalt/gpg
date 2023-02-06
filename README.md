@@ -53,7 +53,7 @@ See the [upgrading instructions](UPGRADING.md).
 
 ## WHAT IS IT?
 
-A gpgstration of a NetLogo plugin and  its design and implmentation. The plugin makes use of Gnu's Pretty Good Privacy software suite to encrypt arbitary data sources in Netlogo. This both secures the data to a reasonable degree and protects any sensitive data that might be in use for a publically available model.
+A demonstration of a NetLogo plugin and  its design and implmentation. The plugin makes use of Gnu's Pretty Good Privacy software suite to encrypt arbitary data sources in Netlogo. This both secures the data to a reasonable degree and protects any sensitive data that might be in use for a publically available model.
 
 ## HOW IT WORKS
 
