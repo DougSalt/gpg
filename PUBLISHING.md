@@ -7,8 +7,12 @@ git clone git@github.com:/DougSalt/NetLogo-Libraries
 ```
 
 or if you have used this before then on the main page of github for that
-project, click on the "Sync fork..." drop down and get it into the state of the
-of the origin
+project, switch to the 6.1 branch and pull to the state of the master.
+You need to update your local version of NetLogo-libraries, locally:
+
+```
+git pull upstream 6.1
+```
 
 You need to update your local version of NetLogo-libraries, locally:
 
