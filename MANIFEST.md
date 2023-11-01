@@ -35,3 +35,5 @@
 
 + target - all the compiler and package generated files, such as class files
   and jars.
+
++ CITATION.cff - used by Zenodo to generate the citation required for this software.
